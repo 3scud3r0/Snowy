@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { terrainHeight } from '../world/terrain.js';
 
 export class SnowTracks {
-  constructor(scene, { maxPoints = 620, width = 1.65 } = {}) {
+  constructor(scene, { maxPoints = 620, width = .78 } = {}) {
     this.maxPoints = maxPoints;
     this.width = width;
     this.points = [];
@@ -18,7 +18,7 @@ export class SnowTracks {
     const material = new THREE.MeshBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: .32,
+      opacity: .16,
       depthWrite: false,
       side: THREE.DoubleSide,
       blending: THREE.NormalBlending
@@ -51,8 +51,8 @@ export class SnowTracks {
     if (n < 2) return;
 
     const indices = [];
-    const dark = new THREE.Color(0x8ba0aa);
-    const light = new THREE.Color(0xcbd7db);
+    const dark = new THREE.Color(0xb7c5ca);
+    const light = new THREE.Color(0xe1e8e8);
 
     for (let i = 0; i < n; i++) {
       const prev = this.points[Math.max(0, i - 1)].p;
