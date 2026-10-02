@@ -31,14 +31,20 @@ export function createPines(count = 820) {
   const dummy = new THREE.Object3D();
 
   for (let i = 0; i < count; i++) {
-    let x, z;
-    do {
-      x = (random() - .5) * 860;
-      z = -random() * 2470 + 270;
-    } while (Math.abs(x) < 38 + random() * 72);
+    const z = -random()*2470+270;
+    let x;
+    if (i < count*.64) {
+      const side = random() < .5 ? -1 : 1;
+      x = side*(42+Math.pow(random(),1.55)*155);
+    } else {
+      do {
+        x = (random()-.5)*860;
+      } while (Math.abs(x) < 105);
+    }
 
-    const h = terrainHeight(x, z);
-    const scale = .58 + random() * .82;
+    const h = terrainHeight(x,z);
+    const nearTrail = Math.abs(x) < 205;
+    const scale = .62+random()*.84+(nearTrail ? .10 : 0);
     const yaw = random() * Math.PI * 2;
 
     dummy.position.set(x, h + 4 * scale, z);
@@ -93,7 +99,7 @@ export function createBirches(count = 150) {
 
   for (let i=0;i<count;i++) {
     const side = random() < .5 ? -1 : 1;
-    const x = side * (42 + random() * 165);
+    const x = side*(38+Math.pow(random(),1.45)*150);
     const z = -random() * 2200 + 170;
     const h = terrainHeight(x,z);
     const s = .65 + random()*.75;
