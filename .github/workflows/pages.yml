@@ -1,55 +1,37 @@
-name: Deploy Snowy to GitHub Pages
-
+name: Deploy Snowy Three.js
 on:
   push:
-    branches: [main, master, work]
+    branches: [main, three-rebuild-steep-target]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: true
-
 jobs:
-  test:
-    name: Validate vertical slice
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Configure Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run syntax and gameplay-core tests
-        run: npm run check
-
+          cache: npm
+      - run: npm install
+      - run: npm run check
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
   deploy:
-    name: Publish GitHub Page
-    needs: test
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Prepare static artifact
-        run: |
-          mkdir -p _site/assets
-          cp index.html styles.css script.js core.js manifest.webmanifest sw.js _site/
-          cp assets/snowy-mark.svg assets/snowy-maskable.svg _site/assets/
-          touch _site/.nojekyll
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
