@@ -73,8 +73,8 @@ export function createTerrain({ width = 900, length = 2600, segmentsX = 180, seg
 
   const normal = geo.attributes.normal;
   const colors = new Float32Array(p.count * 3);
-  const snow = new THREE.Color(0xf0f4f3);
-  const cold = new THREE.Color(0xcbd8dc);
+  const snow = new THREE.Color(0xe8eeef);
+  const cold = new THREE.Color(0xb9c9cf);
   const rock = new THREE.Color(0x566267);
 
   for (let i = 0; i < p.count; i++) {
@@ -96,12 +96,12 @@ export function createTerrain({ width = 900, length = 2600, segmentsX = 180, seg
     color: 0xffffff,
     map: snowDetailTexture(),
     vertexColors: true,
-    roughness: .82,
+    roughness: .88,
     metalness: 0,
-    sheen: .22,
+    sheen: .12,
     sheenColor: new THREE.Color(0xdcecff),
     sheenRoughness: .56,
-    clearcoat: .05,
+    clearcoat: .025,
     clearcoatRoughness: .7
   });
 
