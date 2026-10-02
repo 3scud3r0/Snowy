@@ -45,9 +45,9 @@ export class Rider {
       this.pose.add(armPivot);
     }
 
-    this.board = new THREE.Mesh(new THREE.BoxGeometry(11.7, .36, 2.2), boardMat);
+    this.board = new THREE.Mesh(new THREE.BoxGeometry(2.2, .36, 11.7), boardMat);
     this.board.position.y = .42;
-    this.board.rotation.y = -.08;
+    this.board.rotation.y = -.02;
 
     [this.torso, head, pack, this.board].forEach(m => { m.castShadow = true; m.receiveShadow = true; });
     this.hip.traverse(o => { if (o.isMesh) o.castShadow = true; });
