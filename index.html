@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07131b">
+  <meta name="description" content="Snowy — uma descida cinematográfica de snowboard e ski.">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#08121a" />
@@ -15,6 +19,55 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="experience" id="experience">
+    <canvas id="mountain" aria-label="Descida 3D cinematográfica em uma montanha nevada"></canvas>
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="speed-lines" id="speed-lines" aria-hidden="true"></div>
+    <div class="rider" id="rider" aria-hidden="true"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="leg leg-a"></i><i class="leg leg-b"></i><i class="board"></i></div>
+
+    <header class="hud-top">
+      <a class="wordmark" href="#" aria-label="Snowy">SNOWY<span>●</span></a>
+      <div class="location"><i></i><span>LINHA ZERO</span><b>CORDILHEIRA BOREAL · 3.842 M</b></div>
+      <button id="sound" aria-pressed="false" aria-label="Ativar áudio"><span></span><span></span><span></span> ÁUDIO</button>
+    </header>
+
+    <aside class="telemetry telemetry-left" aria-live="polite">
+      <span>VELOCIDADE</span><strong id="speed">0</strong><small>KM/H</small>
+      <div class="speed-arc"><i id="speed-arc"></i></div>
+    </aside>
+    <aside class="telemetry telemetry-right">
+      <span>FLOW</span><strong id="flow">0</strong><small id="flow-state">EM SILÊNCIO</small>
+    </aside>
+
+    <div class="altitude"><span id="altitude">3.842 M</span><i><b id="progress"></b></i><span>1.120 M</span></div>
+    <div class="surface" id="surface"><i></i> POWDER PROFUNDO</div>
+    <div class="moment" id="moment" aria-live="polite"></div>
+
+    <section class="opening" id="opening">
+      <div class="opening-copy">
+        <p>UMA MONTANHA. NENHUMA LINHA OBRIGATÓRIA.</p>
+        <h1>ENCONTRE<br><em>SUA LINHA.</em></h1>
+        <button id="ride">INICIAR DESCIDA <span>↘</span></button>
+        <small>USE ← → PARA CARVAR · ESPAÇO PARA SALTAR</small>
+      </div>
+      <div class="opening-meta"><span>CONDIÇÃO</span><b>NEVE NOVA · −12°C</b><span>VISIBILIDADE</span><b>18 KM</b></div>
+    </section>
+
+    <div class="controls" id="controls"><span><kbd>←</kbd><kbd>→</kbd> CARVE</span><span><kbd>↓</kbd> TUCK</span><span><kbd>ESPAÇO</kbd> OLLIE</span></div>
+    <button class="pause" id="pause" aria-label="Pausar">Ⅱ</button>
+
+    <section class="finish" id="finish">
+      <p>LINHA CONCLUÍDA</p><h2 id="grade">A</h2>
+      <div><span>FLOW <b id="final-flow">0</b></span><span>VELOCIDADE <b id="final-speed">0</b></span><span>PRECISÃO <b id="final-clean">100%</b></span></div>
+      <button id="again">MAIS UMA DESCIDA ↻</button>
+    </section>
+  </main>
+  <script src="core.js"></script>
+  <script src="script.js"></script>
+  <noscript>Snowy precisa de JavaScript para renderizar a montanha.</noscript>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
