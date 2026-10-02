@@ -15,6 +15,7 @@ export class HUD {
     this.objective = $('#objective-card');
     this.score = $('#score-pop');
     this.checkpointLabel = $('#checkpoint-label');
+    this.objective.classList.add('hidden');
   }
 
   update({ speed, flow, distance, progress }) {
