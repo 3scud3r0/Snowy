@@ -1,55 +1,92 @@
-name: Deploy Snowy to GitHub Pages
-
+name: Deploy Snowy Three.js
 on:
   push:
-    branches: [main, master, work]
+    branches: [main, three-rebuild-steep-target]
   workflow_dispatch:
-
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
-
 concurrency:
-  group: pages
+  group: snowy-three-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
-  test:
-    name: Validate vertical slice
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Configure Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+
+      - name: Vendor CC0 rigged rider
+        if: github.ref == 'refs/heads/three-rebuild-steep-target'
+        shell: bash
+        run: |
+          if [ ! -f public/assets/rider.glb ]; then
+            mkdir -p public/assets
+            curl -fsSL https://raw.githubusercontent.com/programasweights/avatar/main/public/assets/character.glb -o public/assets/rider.glb
+            curl -fsSL https://raw.githubusercontent.com/programasweights/avatar/main/public/assets/QUATERNIUS-LICENSE.txt -o public/assets/QUATERNIUS-LICENSE.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/assets/rider.glb public/assets/QUATERNIUS-LICENSE.txt
+            git commit -m "Vendor CC0 Quaternius rider model"
+            git push origin HEAD:three-rebuild-steep-target
+          fi
+
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run syntax and gameplay-core tests
-        run: npm run check
+
+      - run: npm install
+      - run: npm run check
+
+      - name: Run browser visual smoke test
+        if: github.ref == 'refs/heads/three-rebuild-steep-target'
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/snowy-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill $PREVIEW_PID || true' EXIT
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.5
+          done
+          export CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)"
+          test -n "$CHROME_PATH"
+          echo "Using Chrome at $CHROME_PATH"
+          timeout 75s xvfb-run -a npm run visual:smoke
+          timeout 75s xvfb-run -a npm run visual:quality
+
+      - name: Upload visual QA screenshots
+        if: always() && github.ref == 'refs/heads/three-rebuild-steep-target'
+        uses: actions/upload-artifact@v4
+        with:
+          name: snowy-visual-qa
+          path: qa
+          retention-days: 2
+          if-no-files-found: warn
+
+      - name: Upload branch preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: snowy-preview
+          path: dist
+          retention-days: 2
+
+      - uses: actions/configure-pages@v5
+        if: github.ref == 'refs/heads/main'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          path: dist
 
   deploy:
-    name: Publish GitHub Page
-    needs: test
+    if: github.ref == 'refs/heads/main'
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-      - name: Prepare static artifact
-        run: |
-          mkdir -p _site/assets
-          cp index.html styles.css script.js core.js manifest.webmanifest sw.js _site/
-          cp assets/snowy-mark.svg assets/snowy-maskable.svg _site/assets/
-          touch _site/.nojekyll
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
