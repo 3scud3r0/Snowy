@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Vendor CC0 rigged rider
         if: github.ref == 'refs/heads/three-rebuild-steep-target'
         shell: bash
@@ -29,23 +30,55 @@ jobs:
             git commit -m "Vendor CC0 Quaternius rider model"
             git push origin HEAD:three-rebuild-steep-target
           fi
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - run: npm install
       - run: npm run check
+
+      - name: Install Chromium for visual QA
+        if: github.ref == 'refs/heads/three-rebuild-steep-target'
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser visual smoke test
+        if: github.ref == 'refs/heads/three-rebuild-steep-target'
+        shell: bash
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/snowy-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill $PREVIEW_PID || true' EXIT
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 0.5
+          done
+          npm run visual:smoke
+
+      - name: Upload visual QA screenshots
+        if: always() && github.ref == 'refs/heads/three-rebuild-steep-target'
+        uses: actions/upload-artifact@v4
+        with:
+          name: snowy-visual-qa
+          path: qa
+          retention-days: 2
+          if-no-files-found: warn
+
       - name: Upload branch preview
         uses: actions/upload-artifact@v4
         with:
           name: snowy-preview
           path: dist
           retention-days: 2
+
       - uses: actions/configure-pages@v5
         if: github.ref == 'refs/heads/main'
+
       - uses: actions/upload-pages-artifact@v3
         if: github.ref == 'refs/heads/main'
         with:
           path: dist
+
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: build
