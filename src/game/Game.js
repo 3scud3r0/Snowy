@@ -13,11 +13,19 @@ export class Game {
   constructor(canvas, ui) {
     this.canvas = canvas;
     this.ui = ui;
-    this.qa = new URLSearchParams(location.search).has('qa');
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: !this.qa, powerPreference: 'high-performance' });
+    const query = new URLSearchParams(location.search);
+    this.qaMode = query.get('qa');
+    this.qaLite = this.qaMode === '1' || this.qaMode === 'lite';
+    this.qaFull = this.qaMode === 'full';
+    this.qa = this.qaLite || this.qaFull;
+    this.renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: !this.qaLite,
+      powerPreference: 'high-performance'
+    });
     this.renderer.setPixelRatio(this.qa ? 1 : Math.min(devicePixelRatio, 1.65));
     this.renderer.setSize(innerWidth, innerHeight, false);
-    this.renderer.shadowMap.enabled = !this.qa;
+    this.renderer.shadowMap.enabled = !this.qaLite;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -37,7 +45,7 @@ export class Game {
     this.state = { x: 0, z: 120, speed: 0, maxSpeed: 0, vx: 0, vy: 0, airborne: 0, flow: 0, clean: 100, steer: 0, distance: 0 };
 
     this.setupWorld();
-    this.post = this.qa ? null : new PostFX(this.renderer, this.scene, this.camera);
+    this.post = this.qaLite ? null : new PostFX(this.renderer, this.scene, this.camera);
     this.setupInput();
     this.resize();
     addEventListener('resize', () => this.resize());
@@ -57,7 +65,7 @@ export class Game {
     this.scene.add(this.sunTarget);
     this.sun.target = this.sunTarget;
     this.sun.castShadow = true;
-    this.sun.shadow.mapSize.set(2048, 2048);
+    this.sun.shadow.mapSize.set(this.qaFull ? 1024 : 2048, this.qaFull ? 1024 : 2048);
     this.sun.shadow.camera.left = -190;
     this.sun.shadow.camera.right = 190;
     this.sun.shadow.camera.top = 190;
@@ -68,10 +76,13 @@ export class Game {
     this.scene.add(this.sun);
 
     this.scene.add(
-      createTerrain({ segmentsX: this.qa ? 110 : 180, segmentsZ: this.qa ? 220 : 360 }),
-      createPines(this.qa ? 320 : 820),
-      createBirches(this.qa ? 55 : 150),
-      createRocks(this.qa ? 70 : 190),
+      createTerrain({
+        segmentsX: this.qaLite ? 110 : this.qaFull ? 135 : 180,
+        segmentsZ: this.qaLite ? 220 : this.qaFull ? 270 : 360
+      }),
+      createPines(this.qaLite ? 320 : this.qaFull ? 470 : 820),
+      createBirches(this.qaLite ? 55 : this.qaFull ? 85 : 150),
+      createRocks(this.qaLite ? 70 : this.qaFull ? 110 : 190),
       createCabin(),
       createLift(),
       createFrozenLake()
@@ -113,7 +124,7 @@ export class Game {
     Object.assign(this.state, { x: 0, z: 120, speed: 0, maxSpeed: 0, vx: 0, vy: 0, airborne: 0, flow: 0, clean: 100, steer: 0, distance: 0 });
     this.finished = false;
     if (this.tracks) this.tracks.reset();
-    this.rider.group.position.set(0, terrainHeight(0, 120) + 1, 120);
+    this.rider.group.position.set(0, terrainHeight(0, 120) + .08, 120);
     this.rider.group.rotation.set(0,0,0);
     this.camera.position.set(0, this.rider.group.position.y + 11, 142);
     this.cameraRig.pos.copy(this.camera.position);
@@ -152,7 +163,7 @@ export class Game {
     s.z -= dz;
     s.distance += dz;
 
-    const ground = terrainHeight(s.x, s.z) + 1;
+    const ground = terrainHeight(s.x, s.z) + .08;
 
     if (s.airborne > 0) {
       s.vy -= 21 * dt;
