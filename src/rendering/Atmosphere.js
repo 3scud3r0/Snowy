@@ -51,7 +51,68 @@ function rand(seed) {
   return () => ((s = Math.imul(1664525, s) + 1013904223 >>> 0) / 4294967296);
 }
 
+
+function createMidRidge(scene) {
+  const width=3300;
+  const length=760;
+  const centerZ=-2580;
+  const geo=new THREE.PlaneGeometry(width,length,150,44);
+  geo.rotateX(-Math.PI/2);
+
+  const p=geo.attributes.position;
+  const colors=new Float32Array(p.count*3);
+  const snow=new THREE.Color(0xd5e1e5);
+  const shade=new THREE.Color(0x879ba5);
+  const rock=new THREE.Color(0x596a72);
+
+  for(let i=0;i<p.count;i++) {
+    const x=p.getX(i);
+    const localZ=p.getZ(i);
+    const z=localZ+centerZ;
+
+    const shoulder=1-Math.exp(-Math.pow(Math.abs(x)/330,1.7));
+    const broad=
+      Math.sin(x*.0032+z*.0017)*24+
+      Math.sin(x*.0071-z*.0022)*13+
+      Math.sin(x*.014+z*.0034)*6;
+    const bowl=-Math.exp(-Math.pow(x/390,2))*54;
+    const zShape=Math.exp(-Math.pow((z-centerZ)/390,2));
+
+    p.setY(i,-130+zShape*(shoulder*150+broad+bowl));
+  }
+
+  p.needsUpdate=true;
+  geo.computeVertexNormals();
+  const n=geo.attributes.normal;
+
+  for(let i=0;i<p.count;i++) {
+    const slope=n.getY(i);
+    const c=snow.clone().lerp(shade,THREE.MathUtils.clamp((1-slope)*.64,0,.52));
+    if(slope<.58) c.lerp(rock,THREE.MathUtils.clamp((.58-slope)*1.45,0,.62));
+    colors[i*3]=c.r;
+    colors[i*3+1]=c.g;
+    colors[i*3+2]=c.b;
+  }
+
+  geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+
+  const ridge=new THREE.Mesh(
+    geo,
+    new THREE.MeshStandardMaterial({
+      vertexColors:true,
+      roughness:.98,
+      metalness:0,
+      fog:true
+    })
+  );
+  ridge.position.z=centerZ;
+  ridge.receiveShadow=true;
+  scene.add(ridge);
+  return ridge;
+}
+
 export function createAlpineBackdrop(scene) {
+  const midRidge=createMidRidge(scene);
   const width = 3900;
   const length = 1500;
   const geo = new THREE.PlaneGeometry(width, length, 190, 80);
@@ -118,5 +179,5 @@ export function createAlpineBackdrop(scene) {
   range.position.z = centerZ;
   range.receiveShadow = true;
   scene.add(range);
-  return range;
+  return { midRidge, range };
 }
