@@ -3,6 +3,7 @@ import { HUD } from './ui/HUD.js';
 
 const ui = new HUD();
 const game = new Game(document.querySelector('#game'), ui);
+window.__snowy = game;
 
 document.querySelector('#start').addEventListener('click', () => { document.body.classList.add('playing'); game.start(); });
 document.querySelector('#again').addEventListener('click', () => { document.body.classList.add('playing'); game.start(); });
