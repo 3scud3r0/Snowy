@@ -53,6 +53,7 @@ jobs:
           test -n "$CHROME_PATH"
           echo "Using Chrome at $CHROME_PATH"
           timeout 75s xvfb-run -a npm run visual:smoke
+          timeout 75s xvfb-run -a npm run visual:quality
 
       - name: Upload visual QA screenshots
         if: always() && github.ref == 'refs/heads/three-rebuild-steep-target'
