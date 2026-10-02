@@ -6,78 +6,130 @@ function rng(seed) {
   return () => ((s = Math.imul(1664525, s) + 1013904223 >>> 0) / 4294967296);
 }
 
+
+function createSpruceGeometry() {
+  const segments = 10;
+  const height = 18;
+  const rings = [
+    [0.00,.42],
+    [0.08,4.75],
+    [0.19,3.20],
+    [0.27,4.22],
+    [0.38,2.86],
+    [0.47,3.70],
+    [0.58,2.38],
+    [0.67,3.02],
+    [0.77,1.80],
+    [0.86,2.20],
+    [0.94,1.05],
+    [1.00,.05]
+  ];
+
+  const positions = [];
+  const colors = [];
+  const indices = [];
+  const green = new THREE.Color(0x12372f);
+  const deep = new THREE.Color(0x09251f);
+  const snow = new THREE.Color(0xe7eeee);
+
+  for (let r=0;r<rings.length;r++) {
+    const [yn,baseRadius] = rings[r];
+    for (let s=0;s<segments;s++) {
+      const angle = s/segments*Math.PI*2;
+      const irregular = 1 + Math.sin(angle*3.0+r*.91)*.055 + Math.sin(angle*5.0-r*.47)*.025;
+      const radius = baseRadius*irregular;
+      positions.push(
+        Math.cos(angle)*radius,
+        yn*height,
+        Math.sin(angle)*radius
+      );
+
+      const base = deep.clone().lerp(green,.35+yn*.45);
+      const snowyTier = r%2===0 ? .10 : 0;
+      const snowAmount = THREE.MathUtils.clamp((yn-.18)*.50+snowyTier,0,.48);
+      base.lerp(snow,snowAmount);
+      colors.push(base.r,base.g,base.b);
+    }
+  }
+
+  for (let r=0;r<rings.length-1;r++) {
+    for (let s=0;s<segments;s++) {
+      const next = (s+1)%segments;
+      const a=r*segments+s;
+      const b=r*segments+next;
+      const c=(r+1)*segments+s;
+      const d=(r+1)*segments+next;
+      indices.push(a,c,b,b,c,d);
+    }
+  }
+
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 export function createPines(count = 820) {
   const random = rng(4312);
-  const trunkGeo = new THREE.CylinderGeometry(.34, .54, 8, 6);
-  const crownGeos = [
-    new THREE.ConeGeometry(4.7, 11, 8),
-    new THREE.ConeGeometry(4.0, 10, 8),
-    new THREE.ConeGeometry(3.25, 9, 8)
-  ];
-  const snowGeos = [
-    new THREE.ConeGeometry(4.78, 3.2, 8),
-    new THREE.ConeGeometry(4.08, 2.8, 8),
-    new THREE.ConeGeometry(3.33, 2.5, 8)
-  ];
-  const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3f342a, roughness: 1 });
-  const crownMat = new THREE.MeshStandardMaterial({ color: 0x14342d, roughness: .94 });
-  const snowMat = new THREE.MeshStandardMaterial({ color: 0xe9f0ef, roughness: .9 });
+  const trunkGeo = new THREE.CylinderGeometry(.34,.55,8,7);
+  const crownGeo = createSpruceGeometry();
 
-  const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, count);
-  const crowns = crownGeos.map(g => new THREE.InstancedMesh(g, crownMat, count));
-  const caps = snowGeos.map(g => new THREE.InstancedMesh(g, snowMat, count));
-  [trunks, ...crowns, ...caps].forEach(m => { m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; });
+  const trunkMat = new THREE.MeshStandardMaterial({color:0x40342a,roughness:1});
+  const crownMat = new THREE.MeshStandardMaterial({
+    color:0xffffff,
+    vertexColors:true,
+    roughness:.92,
+    metalness:0
+  });
+
+  const trunks = new THREE.InstancedMesh(trunkGeo,trunkMat,count);
+  const crowns = new THREE.InstancedMesh(crownGeo,crownMat,count);
+  trunks.castShadow = crowns.castShadow = true;
+  trunks.receiveShadow = crowns.receiveShadow = true;
+  trunks.frustumCulled = crowns.frustumCulled = false;
 
   const dummy = new THREE.Object3D();
 
-  for (let i = 0; i < count; i++) {
+  for (let i=0;i<count;i++) {
     const z = -random()*2470+270;
     let x;
+
     if (i < count*.64) {
       const side = random() < .5 ? -1 : 1;
       x = side*(42+Math.pow(random(),1.55)*155);
     } else {
       do {
-        x = (random()-.5)*860;
-      } while (Math.abs(x) < 105);
+        x=(random()-.5)*860;
+      } while (Math.abs(x)<105);
     }
 
     const h = terrainHeight(x,z);
-    const nearTrail = Math.abs(x) < 205;
-    const scale = .62+random()*.84+(nearTrail ? .10 : 0);
-    const yaw = random() * Math.PI * 2;
+    const nearTrail = Math.abs(x)<205;
+    const scale = .60+random()*.78+(nearTrail ? .10 : 0);
+    const yaw = random()*Math.PI*2;
+    const leanX = (random()-.5)*.035;
+    const leanZ = (random()-.5)*.035;
 
-    dummy.position.set(x, h + 4 * scale, z);
-    dummy.scale.set(scale, scale, scale);
-    dummy.rotation.set(0, yaw, 0);
+    dummy.position.set(x,h+4*scale,z);
+    dummy.scale.set(scale,scale,scale);
+    dummy.rotation.set(leanX,yaw,leanZ);
     dummy.updateMatrix();
-    trunks.setMatrixAt(i, dummy.matrix);
+    trunks.setMatrixAt(i,dummy.matrix);
 
-    const layerY = [7.2, 12.0, 16.1];
-    const layerScale = [1, .88, .73];
-
-    crowns.forEach((mesh, layer) => {
-      const s = scale * layerScale[layer];
-      dummy.position.set(x, h + layerY[layer] * scale, z);
-      dummy.scale.set(s, s, s);
-      dummy.rotation.set(0, yaw + layer * .18, 0);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    });
-
-    caps.forEach((mesh, layer) => {
-      const s = scale * layerScale[layer];
-      dummy.position.set(x, h + (layerY[layer] + 3.9) * scale, z);
-      dummy.scale.set(s, s, s);
-      dummy.rotation.set(0, yaw + layer * .18, 0);
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    });
+    dummy.position.set(x,h+1.25*scale,z);
+    dummy.scale.set(scale,scale,scale);
+    dummy.rotation.set(leanX,yaw,leanZ);
+    dummy.updateMatrix();
+    crowns.setMatrixAt(i,dummy.matrix);
   }
 
-  [trunks, ...crowns, ...caps].forEach(m => m.instanceMatrix.needsUpdate = true);
+  trunks.instanceMatrix.needsUpdate = true;
+  crowns.instanceMatrix.needsUpdate = true;
+
   const group = new THREE.Group();
-  group.add(trunks, ...crowns, ...caps);
+  group.add(trunks,crowns);
   return group;
 }
 
@@ -90,7 +142,7 @@ export function createBirches(count = 150) {
   );
   const crown = new THREE.InstancedMesh(
     new THREE.IcosahedronGeometry(3.6, 1),
-    new THREE.MeshStandardMaterial({ color: 0x8c9390, transparent: true, opacity: .42, roughness: 1 }),
+    new THREE.MeshStandardMaterial({ color: 0xc9cfcd, transparent: true, opacity: .16, roughness: 1, depthWrite:false }),
     count
   );
   trunk.castShadow = crown.castShadow = true;
