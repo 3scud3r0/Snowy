@@ -24,7 +24,7 @@ export function createAtmosphere(scene) {
   u.mieDirectionalG.value = .84;
 
   const phi = THREE.MathUtils.degToRad(68);
-  const theta = THREE.MathUtils.degToRad(224);
+  const theta = THREE.MathUtils.degToRad(136);
   const sun = new THREE.Vector3().setFromSphericalCoords(1, phi, theta);
   u.sunPosition.value.copy(sun);
   scene.add(sky);
