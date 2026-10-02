@@ -4,7 +4,7 @@ on:
     branches: [main, three-rebuild-steep-target]
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 concurrency:
@@ -15,6 +15,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Vendor CC0 rigged rider
+        if: github.ref == 'refs/heads/three-rebuild-steep-target'
+        shell: bash
+        run: |
+          if [ ! -f public/assets/rider.glb ]; then
+            mkdir -p public/assets
+            curl -fsSL https://raw.githubusercontent.com/programasweights/avatar/main/public/assets/character.glb -o public/assets/rider.glb
+            curl -fsSL https://raw.githubusercontent.com/programasweights/avatar/main/public/assets/QUATERNIUS-LICENSE.txt -o public/assets/QUATERNIUS-LICENSE.txt
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/assets/rider.glb public/assets/QUATERNIUS-LICENSE.txt
+            git commit -m "Vendor CC0 Quaternius rider model"
+            git push origin HEAD:three-rebuild-steep-target
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22
