@@ -86,6 +86,7 @@ export class Game {
     this.snow = new SnowFX(this.scene);
     this.tracks = new SnowTracks(this.scene);
     this.reset();
+    this.rider.group.visible = false;
   }
 
   setupInput() {
@@ -101,6 +102,7 @@ export class Game {
 
   start() {
     this.reset();
+    this.rider.group.visible = true;
     this.running = true;
     this.ui.start.classList.add('hidden');
     this.ui.finish.classList.remove('visible');
