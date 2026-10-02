@@ -26,11 +26,13 @@ function colorSkinnedMesh(mesh) {
   for (let i=0;i<geometry.attributes.position.count;i++) {
     let bestWeight = -1;
     let bestIndex = 0;
+    const weights = [skinWeight.getX(i), skinWeight.getY(i), skinWeight.getZ(i), skinWeight.getW(i)];
+    const indices = [skinIndex.getX(i), skinIndex.getY(i), skinIndex.getZ(i), skinIndex.getW(i)];
     for (let k=0;k<4;k++) {
-      const weight = skinWeight.getComponent(i,k);
+      const weight = weights[k];
       if (weight > bestWeight) {
         bestWeight = weight;
-        bestIndex = skinIndex.getComponent(i,k);
+        bestIndex = indices[k];
       }
     }
     const bone = mesh.skeleton.bones[bestIndex];
