@@ -180,6 +180,8 @@ export class Game {
     this.snow.emit(this.rider.group.position, s.speed, s.steer);
     this.snow.update(dt, s.z);
     this.cameraRig.update(dt, this.rider.group, s, s.steer);
+    const markerPosition = this.checkpoint.position.clone().add(new THREE.Vector3(0, 24, 0));
+    this.ui.updateWorldMarker(markerPosition, this.camera);
 
     this.sunTarget.position.copy(this.rider.group.position);
     this.sun.position.copy(this.rider.group.position).add(this.sunOffset);
