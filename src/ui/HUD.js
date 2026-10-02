@@ -33,7 +33,7 @@ export class HUD {
     const projected = worldPosition.clone().project(camera);
     const behind = projected.z > 1;
     const x = Math.max(.08, Math.min(.92, projected.x * .5 + .5));
-    const y = Math.max(.12, Math.min(.78, -projected.y * .5 + .5));
+    const y = Math.max(.10, Math.min(.64, -projected.y * .5 + .34));
     this.checkpointLabel.style.left = `${x * 100}%`;
     this.checkpointLabel.style.top = `${y * 100}%`;
     this.checkpointLabel.style.opacity = behind ? '0' : '1';
