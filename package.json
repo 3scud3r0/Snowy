@@ -10,7 +10,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/physics-three.test.js",
     "visual:smoke": "node tests/visual-smoke.mjs",
-    "check": "npm test && npm run build"
+    "check": "npm test && npm run build",
+    "visual:quality": "node tests/visual-quality.mjs"
   },
   "dependencies": {
     "three": "^0.180.0"
