@@ -38,10 +38,6 @@ jobs:
       - run: npm install
       - run: npm run check
 
-      - name: Install Chromium for visual QA
-        if: github.ref == 'refs/heads/three-rebuild-steep-target'
-        run: npx playwright install --with-deps chromium
-
       - name: Run browser visual smoke test
         if: github.ref == 'refs/heads/three-rebuild-steep-target'
         shell: bash
@@ -53,6 +49,9 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 0.5
           done
+          export CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)"
+          test -n "$CHROME_PATH"
+          echo "Using Chrome at $CHROME_PATH"
           xvfb-run -a npm run visual:smoke
 
       - name: Upload visual QA screenshots
