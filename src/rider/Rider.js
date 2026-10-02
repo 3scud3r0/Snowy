@@ -4,6 +4,7 @@ export class Rider {
   constructor() {
     this.group = new THREE.Group();
     this.group.rotation.order = 'YXZ';
+    this.group.scale.setScalar(.52);
     this.pose = new THREE.Group();
     this.group.add(this.pose);
 
