@@ -37,7 +37,7 @@ export function createTerrain({ width = 900, length = 2600, segmentsX = 160, seg
   for (let i = 0; i < p.count; i++) {
     const x = p.getX(i);
     const localZ = p.getZ(i);
-    const worldZ = localZ + length * .38;
+    const worldZ = localZ - length * .38;
     p.setY(i, terrainHeight(x, worldZ));
   }
   p.needsUpdate = true;
