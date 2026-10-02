@@ -1,0 +1,16 @@
+{
+  "name": "Snowy — Encontre sua linha",
+  "short_name": "Snowy",
+  "description": "Vertical slice jogável de snowboard e ski focado em física, velocidade e FLOW.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#07131b",
+  "theme_color": "#07131b",
+  "categories": ["games", "sports"],
+  "icons": [
+    { "src": "assets/snowy-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "assets/snowy-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
