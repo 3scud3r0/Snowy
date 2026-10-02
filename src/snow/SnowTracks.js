@@ -38,7 +38,7 @@ export class SnowTracks {
 
   add(position, steer, airborne) {
     if (airborne) return;
-    const p = new THREE.Vector3(position.x, terrainHeight(position.x, position.z) + 1.055, position.z);
+    const p = new THREE.Vector3(position.x, terrainHeight(position.x, position.z) + .035, position.z);
     if (this.last && this.last.distanceToSquared(p) < 1.8) return;
     this.points.push({ p, steer });
     this.last = p.clone();
