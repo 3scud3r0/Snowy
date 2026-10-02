@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { surfaceAt, flowLabel, grade } from '../src/game/physics.js';
+import { terrainHeight } from '../src/world/terrain.js';
 
 test('surface profiles cycle and retain distinct handling', () => {
   assert.equal(surfaceAt(10).name, 'POWDER');
@@ -20,4 +21,12 @@ test('grade rewards combined flow and clean riding', () => {
   assert.equal(grade(520, 100), 'S');
   assert.equal(grade(300, 100), 'A');
   assert.equal(grade(140, 100), 'B');
+});
+
+test('mountain has a real downhill vertical drop toward the checkpoint', () => {
+  const start = terrainHeight(0, 120);
+  const finish = terrainHeight(0, -1920);
+  assert.ok(Number.isFinite(start));
+  assert.ok(Number.isFinite(finish));
+  assert.ok(finish < start - 120);
 });
