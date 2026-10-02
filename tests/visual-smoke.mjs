@@ -5,6 +5,7 @@ const out = new URL('../qa/', import.meta.url);
 await mkdir(out, { recursive: true });
 
 const browser = await chromium.launch({
+  executablePath: process.env.CHROME_PATH || undefined,
   headless: false,
   args: [
     '--ignore-gpu-blocklist',
