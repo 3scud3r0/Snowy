@@ -112,7 +112,7 @@ export function createAlpineBackdrop(scene) {
     fog:true
   });
   const range = new THREE.Mesh(geo,mat);
-  range.position.z = 0;
+  range.position.z = centerZ;
   range.receiveShadow = true;
   scene.add(range);
   return range;
