@@ -35,7 +35,7 @@ export function createPines(count = 820) {
     do {
       x = (random() - .5) * 860;
       z = -random() * 2470 + 270;
-    } while (Math.abs(x) < 62 + random() * 105);
+    } while (Math.abs(x) < 38 + random() * 72);
 
     const h = terrainHeight(x, z);
     const scale = .58 + random() * .82;
@@ -93,7 +93,7 @@ export function createBirches(count = 150) {
 
   for (let i=0;i<count;i++) {
     const side = random() < .5 ? -1 : 1;
-    const x = side * (65 + random() * 175);
+    const x = side * (42 + random() * 165);
     const z = -random() * 2200 + 170;
     const h = terrainHeight(x,z);
     const s = .65 + random()*.75;
