@@ -28,7 +28,11 @@ try {
   await page.click('#start');
   await page.waitForFunction(()=>window.__snowy?.rider?.loaded === true,null,{timeout:20000});
 
-  await page.waitForTimeout(1700);
+  await page.waitForTimeout(900);
+  await page.evaluate(()=>{
+    window.__snowy.state.speed = Math.max(window.__snowy.state.speed,52);
+  });
+  await page.waitForTimeout(700);
   await page.keyboard.down('ArrowRight');
   await page.waitForTimeout(850);
   await page.keyboard.up('ArrowRight');
