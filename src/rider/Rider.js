@@ -119,10 +119,26 @@ export class Rider {
     });
 
     this.boardAssembly = new THREE.Group();
-    this.board = new THREE.Mesh(snowboardGeometry(), boardMaterial);
-    this.board.position.y = .18;
+    const edgeMaterial = new THREE.MeshStandardMaterial({
+      color:0x101619,
+      roughness:.42,
+      metalness:.32
+    });
+    this.boardEdge = new THREE.Mesh(snowboardGeometry(),edgeMaterial);
+    this.boardEdge.position.y = .10;
+    this.boardEdge.scale.set(1.025,.92,1.025);
+    this.boardEdge.castShadow = true;
+
+    this.board = new THREE.Mesh(snowboardGeometry(),boardMaterial);
+    this.board.position.y = .205;
     this.board.castShadow = this.board.receiveShadow = true;
-    this.boardAssembly.add(this.board, binding(bindingMaterial,-1.12), binding(bindingMaterial,1.12));
+
+    this.boardAssembly.add(
+      this.boardEdge,
+      this.board,
+      binding(bindingMaterial,-1.12),
+      binding(bindingMaterial,1.12)
+    );
     this.boardAssembly.rotation.y = this.boardYaw;
     this.stance.add(this.boardAssembly);
 
@@ -286,7 +302,7 @@ export class Rider {
     this.setBone('lowerarm_l',-.35,0,-.12);
     this.setBone('lowerarm_r',-.35,0,.12);
 
-    if (this.model) this.model.position.y = this.modelBaseY - .18 - speed01*.10;
+    if (this.model) this.model.position.y = this.modelBaseY - .72 - speed01*.08;
   }
 
   setPose({ steer,speed,airborne }) {
