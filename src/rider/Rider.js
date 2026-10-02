@@ -268,9 +268,9 @@ export class Rider {
 
     const edge = THREE.MathUtils.clamp(steer,-1,1);
 
-    this.setBone('pelvis',-.16,edge*.12,edge*.04);
-    this.setBone('spine_01',.22,-.16 + edge*.06,-edge*.05);
-    this.setBone('spine_02',.12,-.14 + edge*.04,-edge*.08);
+    this.setBone('pelvis',-.24,edge*.10,edge*.05);
+    this.setBone('spine_01',.30,-.13 + edge*.05,-edge*.05);
+    this.setBone('spine_02',.18,-.11 + edge*.04,-edge*.08);
     this.setBone('spine_03',-.02,-.18-edge*.08,-edge*.10);
     this.setBone('neck_01',.08,.12-edge*.05,0);
 
@@ -293,8 +293,8 @@ export class Rider {
     const rightBinding = new THREE.Vector3(.18,.40,1.12)
       .applyAxisAngle(new THREE.Vector3(0,1,0),this.boardYaw);
 
-    this.solveLeg('l',leftBinding);
-    this.solveLeg('r',rightBinding);
+    this.solveLeg('l',rightBinding);
+    this.solveLeg('r',leftBinding);
   }
 
   setPose({ steer,speed,airborne }) {
