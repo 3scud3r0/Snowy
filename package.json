@@ -1,6 +1,6 @@
 {
   "name": "snowy-three",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "description": "Snowy — vertical slice 3D de snowboard em Three.js.",
@@ -9,12 +9,14 @@
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/physics-three.test.js",
+    "visual:smoke": "node tests/visual-smoke.mjs",
     "check": "npm test && npm run build"
   },
   "dependencies": {
     "three": "^0.180.0"
   },
   "devDependencies": {
+    "playwright": "^1.55.0",
     "vite": "^7.1.7"
   }
 }
