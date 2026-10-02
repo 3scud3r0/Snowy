@@ -1,6 +1,7 @@
 'use strict';
 
 const CACHE = 'snowy-cinematic-v2';
+const CACHE = 'snowy-v1';
 const SHELL = ['./', './index.html', './styles.css', './core.js', './script.js', './manifest.webmanifest', './assets/snowy-mark.svg'];
 
 self.addEventListener('install', (event) => {

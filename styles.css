@@ -7,3 +7,125 @@
 .controls{position:absolute;z-index:5;left:26px;bottom:22px;display:flex;gap:20px;font:600 8px "Barlow Condensed";letter-spacing:.1em;color:#b6c6c9}.controls kbd{padding:4px 6px;background:#ffffff17;border:1px solid #ffffff30;border-radius:2px;color:white;font:inherit}.pause{position:absolute;z-index:5;right:28px;bottom:22px;border:1px solid #ffffff44;border-radius:50%;width:35px;height:35px;background:#06101666;color:white;cursor:pointer}.finish{position:absolute;z-index:12;inset:0;display:none;place-content:center;text-align:center;background:#061016bd;backdrop-filter:blur(12px)}.finish.visible{display:grid}.finish p{font:600 10px "Barlow Condensed";letter-spacing:.22em;color:var(--acid)}.finish h2{font:800 140px/.8 "Barlow Condensed";margin:15px}.finish>div{display:flex;gap:35px;margin:25px 0 35px}.finish span{font:600 9px "Barlow Condensed";letter-spacing:.13em;color:#94a8ad;display:flex;flex-direction:column;gap:7px}.finish b{font-size:20px;color:white}noscript{position:fixed;z-index:100;inset:auto 0 0;padding:15px;text-align:center;background:var(--acid);color:var(--ink)}
 @media(max-width:760px){.hud-top{padding:18px}.location{display:none}.hud-top{grid-template-columns:1fr 1fr}.opening{padding:7vw}.opening h1{font-size:70px}.opening-meta{display:none}.telemetry{top:22%}.telemetry-left{left:17px}.telemetry-right{right:17px}.telemetry strong{font-size:40px}.altitude{display:none}.controls{left:50%;transform:translateX(-50%);white-space:nowrap}.controls span:nth-child(2){display:none}.surface{bottom:70px}.finish>div{gap:16px}}
 @media(prefers-reduced-motion:reduce){.film-grain,.speed-lines.fast,.moment.show{animation:none}.film-grain{display:none}}
+:root{--ink:#07131b;--snow:#eef5f4;--ice:#c9f2ed;--acid:#b9f542;--blue:#3ea9c1;--muted:#83939a}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--snow);font-family:"DM Sans",sans-serif;overflow-x:hidden}a{color:inherit;text-decoration:none}.topbar{position:fixed;z-index:30;top:0;left:0;right:0;height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 4vw;background:linear-gradient(#07131be8,transparent);font-family:"Barlow Condensed",sans-serif}.brand{font-size:23px;font-weight:800;letter-spacing:.08em;display:flex;gap:10px;align-items:center}.brand-mark{display:grid;place-items:center;width:28px;height:28px;border:2px solid var(--acid);border-radius:50%;color:var(--acid);font-size:17px;font-style:italic}.topbar nav{display:flex;gap:34px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}.topbar nav a{opacity:.75}.topbar nav a:hover{opacity:1;color:var(--acid)}.top-cta{border:1px solid #ffffff55;padding:11px 15px;text-transform:uppercase;font-size:13px;letter-spacing:.08em}.top-cta span{color:var(--acid);margin-left:10px}.hero{height:100svh;min-height:700px;position:relative;overflow:hidden;background:linear-gradient(180deg,#09232d 0%,#1b6070 51%,#8dc6c4 100%)}.aurora{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 15%,#d8f7df77 0,transparent 23%),linear-gradient(125deg,transparent 35%,#8bc4bf22 45%,transparent 58%)}.sun{position:absolute;left:64%;top:17%;width:70px;height:70px;background:#f6fbda;border-radius:50%;box-shadow:0 0 100px 25px #deffd088}.mountain{position:absolute;left:-10%;right:-10%;bottom:-2%;clip-path:polygon(0 100%,0 76%,9% 62%,17% 71%,27% 45%,33% 56%,46% 17%,55% 52%,65% 32%,73% 57%,83% 39%,91% 69%,100% 54%,100% 100%)}.mountain-back{height:76%;background:#8db5b7;opacity:.52}.mountain-mid{height:67%;transform:translateX(13%);background:linear-gradient(115deg,#bad2d0 40%,#4b7f86 40.2%,#84aaab 55%,#315f69 55.2%)}.mountain-front{height:48%;transform:translateX(-16%);background:linear-gradient(110deg,#dfe8e5 37%,#6e9b9d 37.2%,#a8c1bf 60%,#476f78 60.2%);filter:drop-shadow(0 -25px 40px #09232d66)}.hero-copy{position:absolute;z-index:4;left:8%;top:22%}.eyebrow,.section-index{font-family:"Barlow Condensed";letter-spacing:.2em;font-weight:600;font-size:13px;color:var(--acid)}.hero h1,.manifesto h2,.pillars h2,.loop h2,.system-panel h2,.map-copy h2,.flow-section h2,.vertical-slice h2,.play h2{font-family:"Barlow Condensed";font-size:clamp(64px,8vw,126px);line-height:.77;margin:25px 0 34px;letter-spacing:-.045em}.hero h1 em,h2 em{color:var(--acid);font-style:normal}.hero-lead{font-size:19px;line-height:1.5;margin-bottom:32px}.primary-button{display:inline-flex;gap:55px;align-items:center;background:var(--acid);color:var(--ink);padding:17px 21px;font-family:"Barlow Condensed";font-weight:800;letter-spacing:.08em}.altimeter{position:absolute;right:5%;top:30%;display:flex;flex-direction:column;align-items:flex-end;font-family:"Barlow Condensed"}.altimeter span{font-size:10px;letter-spacing:.2em}.altimeter strong{font-size:36px}.altimeter small{font-size:14px;margin-left:3px}.altimeter i{height:130px;border-right:1px solid #ffffff88;margin:10px 8px}.scroll-cue{position:absolute;z-index:5;bottom:28px;left:50%;font:600 10px "Barlow Condensed";letter-spacing:.15em}.scroll-cue span{color:var(--acid);margin-left:12px}.manifesto,.pillars,.loop,.vertical-slice,.play{padding:110px 7vw}.manifesto{background:var(--snow);color:var(--ink)}.section-index{border-top:1px solid currentColor;padding-top:13px;width:100%;opacity:.8}.manifesto-grid{display:grid;grid-template-columns:1fr 1fr;gap:9vw;padding-top:65px}.manifesto h2,.pillars h2,.loop h2,.system-panel h2,.map-copy h2,.flow-section h2,.vertical-slice h2,.play h2{font-size:clamp(55px,6vw,92px);margin-top:0}.large-copy{font:600 clamp(24px,2.6vw,38px)/1.2 "Barlow Condensed";text-transform:uppercase}.manifesto-grid>div>p:not(.large-copy){max-width:550px;line-height:1.8;color:#526167}.principle{border-left:3px solid var(--acid);padding:14px 20px;margin-top:35px;font:600 21px "Barlow Condensed"}.principle span{display:block;font-size:10px;letter-spacing:.18em;margin-bottom:8px;color:#6d7d82}.pillars{background:#0b1b24}.pillars h2{margin-top:55px}.pillar-grid{display:grid;grid-template-columns:repeat(5,1fr);margin-top:60px}.pillar-grid article{min-height:360px;padding:22px;border-left:1px solid #ffffff22;position:relative}.pillar-grid article>span{color:#789098;font:12px "Barlow Condensed"}.pillar-icon{font-size:48px;color:var(--acid);margin:45px 0 25px}.pillar-grid h3{font:700 28px/1 "Barlow Condensed";letter-spacing:.01em}.pillar-grid p{font-size:13px;line-height:1.7;color:#8fa0a6}.loop{background:#10252d}.loop-head{display:grid;grid-template-columns:1.5fr .7fr;align-items:end;margin-top:60px}.loop-head p{color:#9caeb3;line-height:1.7}.loop-track{display:flex;align-items:center;margin-top:65px;justify-content:space-between}.loop-track div{width:150px}.loop-track b{display:block;color:var(--acid);font:12px "Barlow Condensed"}.loop-track strong{display:block;font:700 24px "Barlow Condensed";margin:8px 0}.loop-track small{color:#7f9499}.loop-track i{font-style:normal;color:var(--acid);font-size:28px}.systems{display:grid;grid-template-columns:1fr 1fr}.system-panel{min-height:850px;padding:90px 7vw;position:relative;overflow:hidden}.movement-panel{background:#dfe9e6;color:var(--ink)}.physics-panel{background:#12323d}.panel-number{font:700 200px/1 "Barlow Condensed";position:absolute;right:-10px;top:-20px;opacity:.05}.system-panel h2{font-size:67px;margin:65px 0 30px}.system-panel>p:not(.eyebrow){line-height:1.7;max-width:490px;color:#668086}.control-list{margin-top:55px}.control-list div{display:flex;gap:20px;padding:14px 0;border-top:1px solid #10252d33}.control-list kbd{width:50px;height:40px;border:1px solid #71898d;border-radius:50%;display:grid;place-items:center;font:600 12px "DM Sans";box-shadow:none}.control-list span{display:flex;flex-direction:column}.control-list b{font:700 17px "Barlow Condensed"}.control-list small{color:#73868a;margin-top:4px}.snow-selector{display:flex;border-bottom:1px solid #ffffff26}.snow-selector button{color:#78939c;background:none;border:0;padding:14px 0;margin-right:24px;font:700 12px "Barlow Condensed";letter-spacing:.09em;cursor:pointer}.snow-selector button.active{color:var(--acid);border-bottom:2px solid var(--acid)}.snow-viz{height:225px;margin:25px 0;background:linear-gradient(160deg,transparent 48%,#9dc6c5 49%,#edf5ee 100%);position:relative}.rider{position:absolute;color:#07131b;font-size:24px;left:48%;top:46%;transform:rotate(17deg)}.rider span{display:block;background:#b9f542;width:52px;height:5px;transform:rotate(-5deg)}.spray{position:absolute;left:38%;top:55%;width:85px;height:50px;background:radial-gradient(ellipse,#eef5f4 5%,transparent 60%);filter:blur(4px)}.snow-stats div{display:grid;grid-template-columns:85px 1fr;align-items:center;margin:12px 0}.snow-stats span{font:11px "Barlow Condensed";letter-spacing:.1em}.snow-stats i{height:4px;background:#ffffff1a}.snow-stats b{height:100%;display:block;background:var(--acid);transition:.4s}.mountain-map{min-height:850px;display:grid;grid-template-columns:37% 63%;background:#dbe8e5;color:var(--ink)}.map-copy{padding:100px 4vw 80px 7vw}.map-copy h2{margin-top:70px}.map-copy p{line-height:1.7;color:#5f7177}.zones{position:relative;overflow:hidden;background:linear-gradient(135deg,#d9e5e2 0 20%,#9ab8b8 20.2% 36%,#436f77 36.3% 49%,#bed0cb 49.2% 67%,#698e92 67.2%);clip-path:polygon(12% 0,100% 0,100% 100%,0 100%)}.zones:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(165deg,transparent 0 48px,#ffffff12 50px)}.zones button{position:absolute;z-index:2;left:var(--x);top:var(--y);width:38px;height:38px;border-radius:50%;border:1px solid var(--acid);background:#0b1b24;color:var(--acid);cursor:pointer}.zone-label{position:absolute;z-index:3;left:35%;bottom:7%;background:#07131be8;color:white;padding:17px 23px;display:flex;flex-direction:column;min-width:260px}.zone-label b{font:700 20px "Barlow Condensed"}.zone-label span{font-size:11px;color:#a9b8bc;margin-top:5px}.flow-section{padding:110px 7vw;display:grid;grid-template-columns:1fr 1fr;min-height:700px;background:#081820}.flow-orbit{width:420px;height:420px;border:1px solid #ffffff22;border-radius:50%;position:relative;margin:auto}.flow-orbit:before{content:"";position:absolute;inset:65px;border:1px solid #b9f54255;border-radius:50%}.flow-score{position:absolute;inset:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#102a33;border-radius:50%}.flow-score small,.flow-score span{font:600 10px "Barlow Condensed";letter-spacing:.14em;color:var(--acid)}.flow-score strong{font:700 74px "Barlow Condensed"}.metric{position:absolute;font:600 11px "Barlow Condensed";letter-spacing:.1em}.m1{top:-7px;left:42%}.m2{right:-40px;top:31%}.m3{right:10px;bottom:12%}.m4{left:3px;bottom:8%}.m5{left:-35px;top:34%}.vertical-slice{background:var(--acid);color:var(--ink)}.vertical-slice .section-index{color:var(--ink)}.slice-grid{display:grid;grid-template-columns:1fr 1fr;gap:9vw;margin-top:65px}.slice-grid h2 em{color:#fff}.slice-grid p{max-width:520px;line-height:1.8}.slice-grid ol{list-style:none;padding:0}.slice-grid li{border-top:1px solid #07131b55;padding:18px;display:flex;gap:28px;font:600 21px "Barlow Condensed"}.slice-grid li b{font-size:12px}.play{background:#07131b}.play-header{display:flex;justify-content:space-between;align-items:end}.keyboard-help{display:flex;gap:18px;font:11px "Barlow Condensed";letter-spacing:.08em}.keyboard-help kbd{background:#edf5f4;color:#07131b;border-radius:3px;padding:5px 8px;margin:2px}.game-wrap{position:relative;max-width:1200px;margin:auto;background:#173742;border:1px solid #ffffff22}.game-wrap canvas{display:block;width:100%;height:auto}.game-hud{pointer-events:none;position:absolute;inset:24px;display:flex;justify-content:space-between}.game-hud>div{display:flex;align-items:baseline;gap:5px}.game-hud small{font:10px "Barlow Condensed";letter-spacing:.12em}.game-hud b{font:700 35px "Barlow Condensed"}.game-hud span{font-size:9px}.hud-flow{color:var(--acid)}.start-overlay{position:absolute;inset:0;background:#07131b99;display:grid;place-content:center;text-align:center}.start-overlay.hidden{display:none}.start-overlay button{background:var(--acid);border:0;padding:17px 25px;font:800 17px "Barlow Condensed";letter-spacing:.1em;cursor:pointer}.start-overlay p{font-size:10px;letter-spacing:.08em;color:#b5c2c4}footer{height:180px;display:flex;align-items:center;justify-content:space-between;padding:0 7vw;background:#050e13;border-top:1px solid #ffffff16}footer p{font:700 16px "Barlow Condensed";letter-spacing:.12em;color:var(--acid)}footer>span{font-size:10px;color:#61747b;letter-spacing:.1em}@media(max-width:900px){.topbar nav{display:none}.top-cta{display:none}.manifesto-grid,.loop-head,.systems,.mountain-map,.flow-section,.slice-grid{grid-template-columns:1fr}.pillar-grid{grid-template-columns:1fr 1fr}.pillar-grid article{min-height:290px}.loop-track{overflow-x:auto;gap:24px;padding-bottom:20px}.loop-track div{min-width:130px}.system-panel{min-height:auto}.zones{height:650px;clip-path:none}.flow-orbit{width:310px;height:310px;margin-top:60px}.flow-score{inset:85px}.play-header{display:block}.keyboard-help{margin-bottom:25px}.hero h1{font-size:72px}footer{flex-direction:column;justify-content:center;gap:20px}}@media(max-width:560px){.manifesto,.pillars,.loop,.vertical-slice,.play{padding:85px 6vw}.pillar-grid{grid-template-columns:1fr}.pillar-grid article{min-height:240px}.hero-copy{left:6%;top:20%}.hero h1{font-size:60px}.altimeter{display:none}.system-panel{padding:75px 6vw}.system-panel h2{font-size:52px}.zones{height:500px}.flow-section{padding:80px 6vw}.keyboard-help{display:none}.game-hud{inset:10px}footer>span{display:none}}
+
+/* Vertical-slice blueprint */
+.blueprint{padding:110px 7vw;background:#dfe9e6;color:var(--ink)}
+.blueprint-head{display:grid;grid-template-columns:1.4fr .6fr;gap:8vw;align-items:end;margin:60px 0}
+.blueprint h2{font:700 clamp(55px,6vw,92px)/.82 "Barlow Condensed";letter-spacing:-.045em;margin:0}
+.blueprint-head p{line-height:1.7;color:#52676d}
+.blueprint-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #07131b33;border-left:1px solid #07131b33}
+.blueprint-grid article{min-height:230px;padding:30px;border-right:1px solid #07131b33;border-bottom:1px solid #07131b33}
+.blueprint-grid article>span{font:700 10px "Barlow Condensed";letter-spacing:.16em;color:#608087}
+.blueprint-grid h3{font:700 28px "Barlow Condensed";text-transform:uppercase;margin:35px 0 12px}
+.blueprint-grid p{font-size:13px;line-height:1.7;color:#63767b}
+.discipline-row{display:grid;grid-template-columns:1fr 1fr;margin-top:50px;background:var(--ink);color:white}
+.discipline-row div{padding:25px 30px;display:flex;flex-direction:column;gap:8px;border-right:1px solid #ffffff22}
+.discipline-row b{font:700 21px "Barlow Condensed";color:var(--acid)}
+.discipline-row span{font-size:12px;color:#9bafb4}
+.zones button.selected{transform:scale(1.35);box-shadow:0 0 0 8px #b9f54222}
+
+/* Playable vertical slice */
+.game-wrap{outline:none;overflow:hidden}
+.game-wrap:focus-visible{box-shadow:0 0 0 3px var(--acid)}
+.game-hud{z-index:4}
+.game-hud>div{align-items:flex-start}
+.speedometer,.hud-flow{flex-direction:column!important;gap:0!important}
+.speedometer b,.hud-flow b{line-height:1}
+.speedometer span{margin-left:2px}
+.run-data{position:absolute;left:50%;transform:translateX(-50%);display:flex!important;gap:28px!important;padding:10px 16px;background:#07131b88;backdrop-filter:blur(6px)}
+.run-data>span{display:flex;flex-direction:column}
+.run-data small{color:#90a5aa}
+.run-data b{font:700 14px "Barlow Condensed";letter-spacing:.08em}
+.hud-flow{align-items:flex-end!important}
+.hud-flow span{font:700 9px "Barlow Condensed";letter-spacing:.13em}
+.start-overlay,.result-overlay{z-index:6;backdrop-filter:blur(7px)}
+.start-card,.result-card{width:min(410px,88vw);padding:34px;background:#08171eea;border:1px solid #ffffff2e;box-shadow:0 25px 80px #0009}
+.start-card>p,.result-card>p{color:var(--acid);font:600 10px "Barlow Condensed";letter-spacing:.18em}
+.start-card h3{font:700 48px/.85 "Barlow Condensed";margin:17px 0 24px}
+.start-card ul{list-style:none;padding:0;margin:0 0 25px;text-align:left;border-top:1px solid #ffffff22}
+.start-card li{display:flex;justify-content:space-between;border-bottom:1px solid #ffffff22;padding:10px 0;font-size:12px;color:#9eb0b4}
+.start-card li b{color:white;font-family:"Barlow Condensed"}
+.start-card button,.result-card button{width:100%}
+.start-card small{display:block;color:#71878d;margin-top:12px;font-size:9px;letter-spacing:.08em}
+.result-overlay{position:absolute;inset:0;background:#07131bbb;display:none;place-content:center;text-align:center}
+.result-overlay.visible{display:grid}
+.result-card h3{font:800 110px/1 "Barlow Condensed";color:var(--acid);margin:0}
+.result-card>div{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.result-card span{font:600 9px "Barlow Condensed";color:#81979c;display:flex;flex-direction:column;gap:5px}
+.result-card span b{font-size:15px;color:white}
+.result-card button{background:var(--acid);border:0;padding:15px;font:800 15px "Barlow Condensed";cursor:pointer}
+.trick-callout{position:absolute;z-index:5;top:24%;left:50%;transform:translate(-50%,-10px);font:800 24px "Barlow Condensed";text-align:center;opacity:0;text-shadow:0 2px 16px #07131b}
+.trick-callout b{display:block;color:var(--acid);font-size:13px;letter-spacing:.1em}
+.trick-callout.show{animation:callout 1.5s ease both}
+@keyframes callout{0%{opacity:0;transform:translate(-50%,10px) scale(.9)}15%,65%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-18px) scale(1)}}
+.touch-controls{display:none;position:absolute;z-index:5;left:12px;right:12px;bottom:12px;gap:8px}
+.touch-controls button{width:48px;height:48px;border:1px solid #ffffff44;background:#07131baa;color:white;border-radius:50%;font-weight:800}
+.touch-controls .touch-jump{margin-left:auto;width:70px;border-radius:25px;color:var(--acid)}
+@media(max-width:900px){.blueprint-head{grid-template-columns:1fr}.blueprint-grid{grid-template-columns:1fr 1fr}.touch-controls{display:flex}.game-hud{inset:13px}.run-data{display:none!important}}
+@media(max-width:560px){.blueprint{padding:85px 6vw}.blueprint-grid,.discipline-row{grid-template-columns:1fr}.blueprint-grid article{min-height:190px}.start-card{padding:22px}.start-card h3{font-size:38px}.trick-callout{font-size:18px}}
+
+/* Run configuration, weather and pause states */
+.game-toolbar{max-width:1200px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;border:1px solid #ffffff1c;background:#0b2029;padding:9px}
+.game-toolbar button{border:0;background:transparent;color:#7f989e;padding:9px 13px;font:700 11px "Barlow Condensed";letter-spacing:.09em;cursor:pointer}
+.game-toolbar button.active{background:var(--acid);color:var(--ink)}
+.ride-toggle,.weather-toggle{display:flex;align-items:center;gap:4px}
+.weather-toggle span{font:600 9px "Barlow Condensed";letter-spacing:.13em;color:#789097;margin-right:9px}
+.sound-toggle{border:1px solid #ffffff2e!important;color:#dce8e6!important}
+.weather-fx{position:absolute;z-index:3;inset:0;pointer-events:none;opacity:0;transition:opacity .5s}
+.weather-fx.storm{opacity:.75;background-image:repeating-linear-gradient(110deg,transparent 0 17px,#fff 18px 19px,transparent 20px 42px);background-size:90px 130px;animation:blizzard .5s linear infinite;mix-blend-mode:screen}
+@keyframes blizzard{to{background-position:-90px 130px}}
+.progress-track{position:absolute;z-index:5;left:16%;right:16%;bottom:20px;height:2px;background:#ffffff38;pointer-events:none}
+.progress-track i{position:absolute;left:0;top:0;height:100%;width:0;background:var(--acid);box-shadow:0 0 9px var(--acid);transition:width .15s linear}
+.progress-track span{position:absolute;left:50%;top:7px;transform:translateX(-50%);font:600 8px "Barlow Condensed";letter-spacing:.18em;color:#d9e6e4}
+.pause-button{position:absolute;z-index:5;right:22px;bottom:17px;width:35px;height:35px;border:1px solid #ffffff44;border-radius:50%;background:#07131b99;color:white;cursor:pointer}
+.pause-overlay{display:none;position:absolute;z-index:7;inset:0;background:#061116d9;backdrop-filter:blur(10px);place-content:center;text-align:center}
+.pause-overlay.visible{display:grid}
+.pause-overlay>div{width:min(390px,86vw)}
+.pause-overlay p{font:700 10px "Barlow Condensed";letter-spacing:.19em;color:var(--acid)}
+.pause-overlay h3{font:700 47px/.86 "Barlow Condensed";margin:20px 0 30px}
+.pause-overlay button{display:block;width:100%;padding:14px;margin-top:8px;border:1px solid #ffffff38;background:transparent;color:white;font:700 14px "Barlow Condensed";cursor:pointer}
+.pause-overlay button:first-of-type{background:var(--acid);color:var(--ink);border-color:var(--acid)}
+.mission{text-align:left;border-left:2px solid var(--acid);padding:8px 12px;margin:0 0 18px;background:#b9f5420c}
+.mission span{display:block;font:700 8px "Barlow Condensed";letter-spacing:.16em;color:var(--acid);margin-bottom:4px}
+.mission b{font:600 12px "DM Sans"}
+@media(max-width:700px){.game-toolbar{flex-wrap:wrap;gap:7px}.weather-toggle span{display:none}.game-toolbar button{padding:7px 9px}.progress-track{left:20%;right:20%;bottom:17px}.pause-button{right:10px;bottom:8px}.weather-fx.storm{background-size:65px 100px}}
+
+/* Route challenges, live combo and replay */
+.route-toggle{display:flex;align-items:center;gap:4px}
+.route-toggle span{font:600 9px "Barlow Condensed";letter-spacing:.13em;color:#789097;margin-right:7px}
+.hud-flow em{font:800 13px "Barlow Condensed";font-style:normal;color:white;margin-top:4px;transition:transform .2s}
+.result-card>small{display:block;margin:-6px 0 16px;color:#7e969b;font:600 9px "Barlow Condensed";letter-spacing:.12em}
+.result-card button+button{margin-top:8px;background:transparent;color:white;border:1px solid #ffffff40}
+#result-status.complete{color:var(--acid)}
+@media(max-width:960px){.route-toggle{order:4;width:100%;justify-content:center;border-top:1px solid #ffffff18;padding-top:7px}.route-toggle span{display:block}}
+
+/* Multi-dimensional line-quality report */
+.quality-bars{display:block!important;margin:16px 0 20px!important;padding:12px 0;border-top:1px solid #ffffff1c;border-bottom:1px solid #ffffff1c}
+.quality-bars>div{display:grid;grid-template-columns:76px 1fr 24px;gap:9px;align-items:center;margin:7px 0;text-align:left}
+.quality-bars span{display:block!important;font:700 9px "Barlow Condensed"!important;letter-spacing:.08em;text-transform:uppercase;color:#9db0b4!important}
+.quality-bars i{height:3px;background:#ffffff1b;overflow:hidden}
+.quality-bars i b{display:block;height:100%;background:var(--acid);animation:quality-grow .7s ease both}
+.quality-bars em{font:700 10px "Barlow Condensed";font-style:normal;color:white}
+@keyframes quality-grow{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.weather-fx.storm,.trick-callout.show,.quality-bars i b{animation:none!important}.snow-stats b{transition:none}}
+
+/* Replay Studio: timeline, speed and camera direction */
+.replay-studio{position:absolute;z-index:8;left:18px;right:18px;bottom:16px;display:none;grid-template-columns:auto minmax(120px,1fr) repeat(6,auto);align-items:center;gap:7px;padding:10px;background:#07131be6;border:1px solid #ffffff2b;backdrop-filter:blur(12px);box-shadow:0 12px 45px #0008}
+.replay-studio.visible{display:grid}
+.replay-studio>div{display:flex;flex-direction:column;min-width:86px}
+.replay-studio>div span{font:700 8px "Barlow Condensed";letter-spacing:.14em;color:var(--acid)}
+.replay-studio>div b{font:700 18px "Barlow Condensed"}
+.replay-studio input{accent-color:var(--acid);width:100%}
+.replay-studio button,.replay-studio select{height:34px;border:1px solid #ffffff2e;background:#10252d;color:white;padding:0 10px;font:700 9px "Barlow Condensed";letter-spacing:.08em;cursor:pointer}
+.replay-studio button.active{background:var(--acid);color:var(--ink);border-color:var(--acid)}
+.replay-studio select{color:var(--acid)}
+@media(max-width:800px){.replay-studio{grid-template-columns:auto 1fr repeat(2,auto)}.replay-studio [data-camera]{display:none}.replay-studio select{display:none}}
+@media(max-width:500px){.replay-studio{left:7px;right:7px;bottom:7px}.replay-studio>div{display:none}}
+
+/* Installable GitHub Pages build */
+.top-actions{display:flex;align-items:center;gap:8px}
+#install-game{border:0;background:var(--acid);color:var(--ink);padding:12px 15px;font:800 12px "Barlow Condensed";letter-spacing:.1em;cursor:pointer}
+#install-game[hidden]{display:none}
+noscript{position:fixed;z-index:100;left:0;right:0;bottom:0;padding:16px;background:#b9f542;color:#07131b;text-align:center;font-weight:700}
+@media(max-width:900px){#install-game{display:none}}
