@@ -99,7 +99,8 @@ export class Rider {
     this.stance = new THREE.Group();
     this.group.add(this.stance);
 
-    this.bodyYaw = -.30;
+    this.bodyYaw = -.16;
+    this.boardYaw = .64;
 
     this.fallback = this.createFallback();
     this.fallback.scale.setScalar(.48);
@@ -122,6 +123,7 @@ export class Rider {
     this.board.position.y = .18;
     this.board.castShadow = this.board.receiveShadow = true;
     this.boardAssembly.add(this.board, binding(bindingMaterial,-1.12), binding(bindingMaterial,1.12));
+    this.boardAssembly.rotation.y = this.boardYaw;
     this.stance.add(this.boardAssembly);
 
     this.backpack = new THREE.Mesh(
@@ -284,10 +286,15 @@ export class Rider {
     this.setBone('lowerarm_l',-.35,0,-.12);
     this.setBone('lowerarm_r',-.35,0,.12);
 
-    if (this.model) this.model.position.y = this.modelBaseY - .72 - speed01*.24;
+    if (this.model) this.model.position.y = this.modelBaseY - .90 - speed01*.28;
 
-    this.solveLeg('l',new THREE.Vector3(-.24,.39,-1.12));
-    this.solveLeg('r',new THREE.Vector3(.24,.39,1.12));
+    const leftBinding = new THREE.Vector3(-.18,.40,-1.12)
+      .applyAxisAngle(new THREE.Vector3(0,1,0),this.boardYaw);
+    const rightBinding = new THREE.Vector3(.18,.40,1.12)
+      .applyAxisAngle(new THREE.Vector3(0,1,0),this.boardYaw);
+
+    this.solveLeg('l',leftBinding);
+    this.solveLeg('r',rightBinding);
   }
 
   setPose({ steer,speed,airborne }) {
@@ -302,7 +309,8 @@ export class Rider {
     );
     this.stance.rotation.y = THREE.MathUtils.lerp(this.stance.rotation.y,steer*.035,.08);
 
-    this.boardAssembly.rotation.z = THREE.MathUtils.lerp(this.boardAssembly.rotation.z,steer*.085,.12);
+    this.boardAssembly.rotation.z = THREE.MathUtils.lerp(this.boardAssembly.rotation.z,steer*.10,.12);
+    this.boardAssembly.rotation.y = THREE.MathUtils.lerp(this.boardAssembly.rotation.y,this.boardYaw-steer*.12,.10);
     this.backpack.rotation.z = THREE.MathUtils.lerp(this.backpack.rotation.z,-lean*.35,.1);
 
     this.poseBones(steer,speed01);
