@@ -26,7 +26,7 @@ export function createPines(count = 820) {
   const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, count);
   const crowns = crownGeos.map(g => new THREE.InstancedMesh(g, crownMat, count));
   const caps = snowGeos.map(g => new THREE.InstancedMesh(g, snowMat, count));
-  [trunks, ...crowns, ...caps].forEach(m => { m.castShadow = true; m.receiveShadow = true; });
+  [trunks, ...crowns, ...caps].forEach(m => { m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; });
 
   const dummy = new THREE.Object3D();
 
@@ -88,6 +88,7 @@ export function createBirches(count = 150) {
     count
   );
   trunk.castShadow = crown.castShadow = true;
+  trunk.frustumCulled = crown.frustumCulled = false;
   const dummy = new THREE.Object3D();
 
   for (let i=0;i<count;i++) {
@@ -114,6 +115,7 @@ export function createRocks(count = 190) {
   const mat = new THREE.MeshStandardMaterial({ color: 0x414a4d, roughness: .97 });
   const rocks = new THREE.InstancedMesh(geo, mat, count);
   rocks.castShadow = rocks.receiveShadow = true;
+  rocks.frustumCulled = false;
   const dummy = new THREE.Object3D();
 
   for (let i = 0; i < count; i++) {
