@@ -13,10 +13,11 @@ export class Game {
   constructor(canvas, ui) {
     this.canvas = canvas;
     this.ui = ui;
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.65));
+    this.qa = new URLSearchParams(location.search).has('qa');
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: !this.qa, powerPreference: 'high-performance' });
+    this.renderer.setPixelRatio(this.qa ? 1 : Math.min(devicePixelRatio, 1.65));
     this.renderer.setSize(innerWidth, innerHeight, false);
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = !this.qa;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -36,7 +37,7 @@ export class Game {
     this.state = { x: 0, z: 120, speed: 0, maxSpeed: 0, vx: 0, vy: 0, airborne: 0, flow: 0, clean: 100, steer: 0, distance: 0 };
 
     this.setupWorld();
-    this.post = new PostFX(this.renderer, this.scene, this.camera);
+    this.post = this.qa ? null : new PostFX(this.renderer, this.scene, this.camera);
     this.setupInput();
     this.resize();
     addEventListener('resize', () => this.resize());
@@ -67,10 +68,10 @@ export class Game {
     this.scene.add(this.sun);
 
     this.scene.add(
-      createTerrain(),
-      createPines(),
-      createBirches(),
-      createRocks(),
+      createTerrain({ segmentsX: this.qa ? 110 : 180, segmentsZ: this.qa ? 220 : 360 }),
+      createPines(this.qa ? 320 : 820),
+      createBirches(this.qa ? 55 : 150),
+      createRocks(this.qa ? 70 : 190),
       createCabin(),
       createLift(),
       createFrozenLake()
@@ -209,7 +210,8 @@ export class Game {
     const dt = Math.min((now - this.last) / 1000, .035);
     this.last = now;
     if (this.running) this.update(dt);
-    this.post.render();
+    if (this.post) this.post.render();
+    else this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(t => this.loop(t));
   }
 
