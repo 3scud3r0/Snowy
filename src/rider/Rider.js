@@ -99,8 +99,8 @@ export class Rider {
     this.stance = new THREE.Group();
     this.group.add(this.stance);
 
-    this.bodyYaw = -.16;
-    this.boardYaw = .64;
+    this.bodyYaw = -.08;
+    this.boardYaw = .52;
 
     this.fallback = this.createFallback();
     this.fallback.scale.setScalar(.48);
@@ -274,27 +274,19 @@ export class Rider {
     this.setBone('spine_03',-.02,-.18-edge*.08,-edge*.10);
     this.setBone('neck_01',.08,.12-edge*.05,0);
 
-    this.setBone('thigh_l',0,0,.18);
-    this.setBone('thigh_r',0,0,-.18);
-    this.setBone('calf_l',0,0,0);
-    this.setBone('calf_r',0,0,0);
-    this.setBone('foot_l',0,0,.04);
-    this.setBone('foot_r',0,0,-.04);
+    this.setBone('thigh_l',-.70,.05,-.30-edge*.06);
+    this.setBone('thigh_r',-.66,-.05,.30-edge*.06);
+    this.setBone('calf_l',1.18+speed01*.16,0,.08);
+    this.setBone('calf_r',1.22+speed01*.16,0,-.08);
+    this.setBone('foot_l',-.34,.03,-.16);
+    this.setBone('foot_r',-.34,-.03,.16);
 
     this.setBone('upperarm_l',-.18,-.10,-.78-edge*.24);
     this.setBone('upperarm_r',-.18,.10,.78-edge*.24);
     this.setBone('lowerarm_l',-.35,0,-.12);
     this.setBone('lowerarm_r',-.35,0,.12);
 
-    if (this.model) this.model.position.y = this.modelBaseY - .90 - speed01*.28;
-
-    const leftBinding = new THREE.Vector3(-.18,.40,-1.12)
-      .applyAxisAngle(new THREE.Vector3(0,1,0),this.boardYaw);
-    const rightBinding = new THREE.Vector3(.18,.40,1.12)
-      .applyAxisAngle(new THREE.Vector3(0,1,0),this.boardYaw);
-
-    this.solveLeg('l',rightBinding);
-    this.solveLeg('r',leftBinding);
+    if (this.model) this.model.position.y = this.modelBaseY - .18 - speed01*.10;
   }
 
   setPose({ steer,speed,airborne }) {
