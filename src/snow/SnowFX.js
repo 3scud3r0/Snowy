@@ -70,8 +70,8 @@ export class SnowFX {
 
   emit(position, speed, steer) {
     if (speed < 8) return;
-    const amount = Math.min(30,3+Math.floor(speed/7)+Math.floor(edge*7));
     const edge = Math.abs(steer);
+    const amount = Math.min(30,3+Math.floor(speed/7)+Math.floor(edge*7));
     for (let n=0;n<amount;n++) {
       const i=this.cursor++%this.sprayCount, k=i*3;
       this.positions[k]=position.x+(Math.random()-.5)*(1.2+edge*2.4);
