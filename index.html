@@ -1,239 +1,67 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07131b">
-  <meta name="description" content="Snowy — uma descida cinematográfica de snowboard e ski.">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#08121a" />
-  <meta name="description" content="Snowy é um vertical slice jogável de snowboard e ski, focado em física, velocidade, criatividade e FLOW.">
-  <meta property="og:title" content="SNOWY — Encontre sua linha">
-  <meta property="og:description" content="A montanha não é o cenário. Ela é o jogo.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/snowy-mark.svg">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#dce8ef" />
+  <meta name="description" content="Snowy — freeride de snowboard em uma montanha 3D aberta." />
   <title>SNOWY — Encontre sua linha</title>
-  <link rel="icon" href="assets/snowy-mark.svg" type="image/svg+xml">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/src/styles.css" />
 </head>
 <body>
-  <main class="experience" id="experience">
-    <canvas id="mountain" aria-label="Descida 3D cinematográfica em uma montanha nevada"></canvas>
-    <div class="film-grain" aria-hidden="true"></div>
-    <div class="speed-lines" id="speed-lines" aria-hidden="true"></div>
-    <div class="rider" id="rider" aria-hidden="true"><i class="head"></i><i class="body"></i><i class="arm"></i><i class="leg leg-a"></i><i class="leg leg-b"></i><i class="board"></i></div>
+  <div id="app">
+    <canvas id="game" aria-label="Snowy, descida 3D em uma montanha nevada"></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="speed-fx" id="speed-fx" aria-hidden="true"></div>
 
-    <header class="hud-top">
-      <a class="wordmark" href="#" aria-label="Snowy">SNOWY<span>●</span></a>
-      <div class="location"><i></i><span>LINHA ZERO</span><b>CORDILHEIRA BOREAL · 3.842 M</b></div>
-      <button id="sound" aria-pressed="false" aria-label="Ativar áudio"><span></span><span></span><span></span> ÁUDIO</button>
+    <header class="top-hud">
+      <div class="brand"><span class="brand-mark">▲</span> SNOWY</div>
+      <div class="objective-mini"><span>LINHA ZERO</span><b>ALCANCE O CHECKPOINT</b></div>
+      <button id="sound" class="hud-button" aria-pressed="false">ÁUDIO OFF</button>
     </header>
 
-    <aside class="telemetry telemetry-left" aria-live="polite">
-      <span>VELOCIDADE</span><strong id="speed">0</strong><small>KM/H</small>
-      <div class="speed-arc"><i id="speed-arc"></i></div>
-    </aside>
-    <aside class="telemetry telemetry-right">
-      <span>FLOW</span><strong id="flow">0</strong><small id="flow-state">EM SILÊNCIO</small>
+    <section class="objective-card" id="objective-card">
+      <div class="objective-icon">△</div>
+      <div class="objective-copy">
+        <small>OBJETIVO</small>
+        <strong>DESÇA ATÉ O FAROL</strong>
+        <p>Siga a linha natural da montanha e passe pelo checkpoint.</p>
+      </div>
+    </section>
+
+    <section class="speedometer" aria-label="Telemetria">
+      <div class="speed-ring"><span id="speed">0</span><small>KM/H</small></div>
+      <div class="flow"><span>FLOW</span><i><b id="flow-bar"></b></i><em id="flow">0</em></div>
+    </section>
+
+    <aside class="route-hud">
+      <span class="mountain-icon">⌃</span>
+      <div class="route-line"><i id="route-dot"></i></div>
+      <small id="distance">620 M</small>
     </aside>
 
-    <div class="altitude"><span id="altitude">3.842 M</span><i><b id="progress"></b></i><span>1.120 M</span></div>
-    <div class="surface" id="surface"><i></i> POWDER PROFUNDO</div>
-    <div class="moment" id="moment" aria-live="polite"></div>
+    <div class="checkpoint-label" id="checkpoint-label"><b>⌃</b><span id="checkpoint-distance">620 m</span></div>
+    <div class="score-pop" id="score-pop"></div>
 
-    <section class="opening" id="opening">
-      <div class="opening-copy">
-        <p>UMA MONTANHA. NENHUMA LINHA OBRIGATÓRIA.</p>
+    <section class="start-screen" id="start-screen">
+      <div class="start-panel">
+        <p>SNOWY / VERTICAL SLICE 03</p>
         <h1>ENCONTRE<br><em>SUA LINHA.</em></h1>
-        <button id="ride">INICIAR DESCIDA <span>↘</span></button>
-        <small>USE ← → PARA CARVAR · ESPAÇO PARA SALTAR</small>
-      </div>
-      <div class="opening-meta"><span>CONDIÇÃO</span><b>NEVE NOVA · −12°C</b><span>VISIBILIDADE</span><b>18 KM</b></div>
-    </section>
-
-    <div class="controls" id="controls"><span><kbd>←</kbd><kbd>→</kbd> CARVE</span><span><kbd>↓</kbd> TUCK</span><span><kbd>ESPAÇO</kbd> OLLIE</span></div>
-    <button class="pause" id="pause" aria-label="Pausar">Ⅱ</button>
-
-    <section class="finish" id="finish">
-      <p>LINHA CONCLUÍDA</p><h2 id="grade">A</h2>
-      <div><span>FLOW <b id="final-flow">0</b></span><span>VELOCIDADE <b id="final-speed">0</b></span><span>PRECISÃO <b id="final-clean">100%</b></span></div>
-      <button id="again">MAIS UMA DESCIDA ↻</button>
-    </section>
-  </main>
-  <script src="core.js"></script>
-  <script src="script.js"></script>
-  <noscript>Snowy precisa de JavaScript para renderizar a montanha.</noscript>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Snowy, início"><span class="brand-mark">S</span> SNOWY</a>
-    <nav aria-label="Navegação principal">
-      <a href="#visao">Visão</a><a href="#sistemas">Sistemas</a><a href="#montanha">Montanha</a><a href="#slice">Vertical slice</a>
-    </nav>
-    <div class="top-actions"><button id="install-game" hidden>INSTALAR</button><a class="top-cta" href="#play">Jogar protótipo <span>↘</span></a></div>
-  </header>
-
-  <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="aurora"></div><div class="sun"></div>
-      <div class="mountain mountain-back"></div><div class="mountain mountain-mid"></div><div class="mountain mountain-front"></div>
-      <div class="hero-copy">
-        <p class="eyebrow">UM MUNDO. INFINITAS LINHAS.</p>
-        <h1 id="hero-title">ENCONTRE<br><em>SUA LINHA.</em></h1>
-        <p class="hero-lead">A montanha não é o cenário.<br>Ela é o jogo.</p>
-        <a href="#play" class="primary-button">COMEÇAR A DESCIDA <span>↓</span></a>
-      </div>
-      <div class="altimeter"><span>ALTITUDE</span><strong>3.842<small>M</small></strong><i></i></div>
-      <div class="scroll-cue">ROLE PARA EXPLORAR <span>↓</span></div>
-    </section>
-
-    <section class="manifesto" id="visao">
-      <div class="section-index">01 / VISÃO</div>
-      <div class="manifesto-grid">
-        <h2>A DESCIDA<br>É A HISTÓRIA.</h2>
-        <div>
-          <p class="large-copy">SNOWY é uma montanha aberta onde cada curva é uma decisão — e cada linha carrega sua assinatura.</p>
-          <p>Sem caminho obrigatório. Sem espetáculo automático. Apenas você, sua técnica e um território que muda a cada tempestade. Aprenda em minutos. Passe anos dominando.</p>
-          <div class="principle"><span>PRINCÍPIO NORTEADOR</span>“Isso torna a descida mais divertida?”</div>
-        </div>
+        <div class="start-meta"><span>CONDIÇÃO <b>NEVE NOVA</b></span><span>ALTITUDE <b>3.842 M</b></span></div>
+        <button id="start">INICIAR DESCIDA <span>▶</span></button>
+        <small>WASD / SETAS PARA CARVAR · ESPAÇO PARA OLLIE · SHIFT PARA TUCK</small>
       </div>
     </section>
 
-    <section class="pillars" aria-labelledby="pillars-title">
-      <div class="section-index">02 / 5 PILARES</div>
-      <h2 id="pillars-title">O QUE FAZ <em>SNOWY</em></h2>
-      <div class="pillar-grid">
-        <article><span>01</span><div class="pillar-icon">⌁</div><h3>MOVIMENTO<br>VIVO</h3><p>Resposta imediata, peso legível e liberdade para transformar intenção em trajetória.</p></article>
-        <article><span>02</span><div class="pillar-icon">◭</div><h3>MONTANHA<br>BRINQUEDO</h3><p>Cada relevo é uma possibilidade. A pergunta nunca é “posso?”, mas “como?”.</p></article>
-        <article><span>03</span><div class="pillar-icon">∞</div><h3>FLOW, NÃO<br>PONTOS</h3><p>Ritmo, risco e criatividade importam mais que multiplicadores vazios.</p></article>
-        <article><span>04</span><div class="pillar-icon">✦</div><h3>NEVE QUE<br>RESPONDE</h3><p>Superfícies têm memória, textura e consequência. Você sente antes de ver.</p></article>
-        <article><span>05</span><div class="pillar-icon">◎</div><h3>HISTÓRIAS<br>EMERGENTES</h3><p>Clima, pessoas e escolhas fazem cada retorno à montanha ser diferente.</p></article>
+    <section class="finish-screen" id="finish-screen">
+      <div>
+        <p>CHECKPOINT ALCANÇADO</p>
+        <h2 id="final-grade">A</h2>
+        <span id="final-stats">0 KM/H · FLOW 0</span>
+        <button id="again">DESCER NOVAMENTE ↻</button>
       </div>
     </section>
-
-    <section class="loop" id="sistemas">
-      <div class="section-index">03 / CORE LOOP</div>
-      <div class="loop-head"><h2>UMA DESCIDA.<br><em>MAIS UMA.</em></h2><p>O progresso não termina em uma tela de resultado. Cada recompensa abre uma nova forma de olhar para a mesma montanha.</p></div>
-      <div class="loop-track" aria-label="Loop principal do jogo">
-        <div><b>01</b><strong>EXPLORAR</strong><small>Leia o terreno</small></div><i>→</i>
-        <div><b>02</b><strong>TRAÇAR</strong><small>Escolha sua linha</small></div><i>→</i>
-        <div><b>03</b><strong>DESCER</strong><small>Velocidade + técnica</small></div><i>→</i>
-        <div><b>04</b><strong>ARRISCAR</strong><small>Improviso + domínio</small></div><i>→</i>
-        <div><b>05</b><strong>EVOLUIR</strong><small>Novas possibilidades</small></div>
-      </div>
-    </section>
-
-    <section class="systems">
-      <div class="system-panel movement-panel">
-        <div class="panel-number">04</div><p class="eyebrow">MOVIMENTO / CONTROLE</p>
-        <h2>INTUITIVO<br><em>NA SUPERFÍCIE.</em><br>PROFUNDO<br>POR DENTRO.</h2>
-        <p>O mesmo gesto que inicia uma curva casual pode, com timing e pressão precisos, esculpir um carve perfeito.</p>
-        <div class="control-list">
-          <div><kbd>LS</kbd><span><b>DIREÇÃO</b><small>Inclinação + pressão de borda</small></span></div>
-          <div><kbd>RT</kbd><span><b>CARVE</b><small>Segure e module a pressão</small></span></div>
-          <div><kbd>A</kbd><span><b>OLLIE / SALTO</b><small>Carregue, solte, voe</small></span></div>
-          <div><kbd>RS</kbd><span><b>CORPO NO AR</b><small>Rotação + ajuste de pouso</small></span></div>
-        </div>
-      </div>
-      <div class="system-panel physics-panel">
-        <div class="panel-number">05</div><p class="eyebrow">FÍSICA / SUPERFÍCIE</p>
-        <h2>A NEVE<br><em>FALA COM VOCÊ.</em></h2>
-        <div class="snow-selector" role="tablist">
-          <button class="active" data-snow="powder">POWDER</button><button data-snow="packed">COMPACTA</button><button data-snow="ice">GELO</button>
-        </div>
-        <div class="snow-viz"><div class="rider">●<span></span></div><div class="spray"></div></div>
-        <div class="snow-stats">
-          <div><span>ATRITO</span><i><b id="friction"></b></i></div><div><span>FLUTUAÇÃO</span><i><b id="float"></b></i></div><div><span>EDGE GRIP</span><i><b id="grip"></b></i></div>
-        </div>
-        <p id="snow-description">Macia, profunda, desacelera o rider e recompensa linhas fluidas com boa flutuação.</p>
-      </div>
-    </section>
-
-    <section class="mountain-map" id="montanha">
-      <div class="map-copy"><div class="section-index">06 / A MONTANHA</div><h2>VERTICAL.<br>VASTA.<br><em>VIVA.</em></h2><p>Um maciço contínuo, desenhado de cima para baixo. Cada zona ensina uma habilidade e revela rotas para a próxima.</p></div>
-      <div class="zones">
-        <button style="--x:57%;--y:8%" data-zone="Cume Boreal|3.842 m · Exposição extrema">01</button>
-        <button style="--x:72%;--y:30%" data-zone="Agulhas|3.120 m · Freeride técnico">02</button>
-        <button style="--x:46%;--y:47%" data-zone="Linha das Nuvens|2.460 m · Floresta e powder">03</button>
-        <button style="--x:28%;--y:64%" data-zone="Vale Cinético|1.680 m · Parks e pistas">04</button>
-        <button style="--x:61%;--y:79%" data-zone="Vila Lumen|980 m · Comunidade e oficinas">05</button>
-        <div class="zone-label" id="zone-label"><b>Cume Boreal</b><span>3.842 m · Exposição extrema</span></div>
-      </div>
-    </section>
-
-    <section class="flow-section">
-      <div><div class="section-index">07 / SISTEMA FLOW</div><h2>NÃO É SOBRE<br>O MAIOR NÚMERO.<br><em>É SOBRE A MELHOR LINHA.</em></h2></div>
-      <div class="flow-orbit"><div class="flow-score"><small>FLOW</small><strong>86</strong><span>EM SINTONIA</span></div><span class="metric m1">VELOCIDADE</span><span class="metric m2">PRECISÃO</span><span class="metric m3">RISCO</span><span class="metric m4">VARIEDADE</span><span class="metric m5">FLUIDEZ</span></div>
-    </section>
-
-    <section class="vertical-slice" id="slice">
-      <div class="section-index">08 / PRIMEIRO VERTICAL SLICE</div>
-      <div class="slice-grid"><div><h2>UMA LINHA.<br><em>TODAS AS SENSAÇÕES.</em></h2><p><b>“Linha Zero”</b> prova o coração do jogo antes de expandirmos o mundo: uma descida de 3 minutos, do cume ao bosque, com três superfícies, clima mutável e múltiplas rotas.</p></div><ol><li><b>01</b><span>Sentir peso e velocidade</span></li><li><b>02</b><span>Ler e escolher terreno</span></li><li><b>03</b><span>Carvar, saltar e pousar</span></li><li><b>04</b><span>Construir FLOW</span></li><li><b>05</b><span>Querer tentar outra vez</span></li></ol></div>
-    </section>
-
-    <section class="blueprint" id="blueprint">
-      <div class="section-index">09 / BLUEPRINT DO SLICE</div>
-      <div class="blueprint-head">
-        <h2>CONSTRUIR.<br><em>TESTAR. SENTIR.</em></h2>
-        <p>O primeiro ciclo do Gauntlet resolve uma única pergunta: a descida é tão boa que você quer voltar imediatamente?</p>
-      </div>
-      <div class="blueprint-grid">
-        <article><span>OBJETIVO</span><h3>Dominar a curva</h3><p>Converter intenção em pressão de borda, com leitura visual, sonora e tátil imediata.</p></article>
-        <article><span>ESTADOS</span><h3>Solo · Ar · Impacto</h3><p>Carve, derrapagem, tuck, ollie, rotação, pouso limpo, recuperação e queda.</p></article>
-        <article><span>SUPERFÍCIES</span><h3>Três personalidades</h3><p>Powder flutua, pista compacta responde e gelo preserva velocidade enquanto reduz o grip.</p></article>
-        <article><span>RISCO</span><h3>Escolha legível</h3><p>Portas estreitas, saltos opcionais e proximidade entregam FLOW sem obrigar tricks.</p></article>
-        <article><span>FALHA</span><h3>Rápida e útil</h3><p>Impactos quebram o ritmo, mostram a causa e devolvem o controle sem punir exploração.</p></article>
-        <article><span>SUCESSO</span><h3>“Mais uma vez”</h3><p>70% dos testes voluntários reiniciam para tentar uma linha diferente ou mais limpa.</p></article>
-      </div>
-      <div class="discipline-row">
-        <div><b>SNOWBOARD</b><span>Carve assimétrico · butter · ollie · grabs · rotação livre</span></div>
-        <div><b>SKI</b><span>Curva paralela · absorção · moguls · freestyle · downhill tuck</span></div>
-      </div>
-    </section>
-
-    <section class="play" id="play">
-      <div class="play-header"><div><p class="eyebrow">PROTÓTIPO JOGÁVEL / LINHA ZERO</p><h2>LEIA. ESCOLHA. <em>DESÇA.</em></h2></div><div class="keyboard-help"><span><kbd>←</kbd><kbd>→</kbd> CURVAR</span><span><kbd>ESPAÇO</kbd> SALTAR</span></div></div>
-      <div class="game-toolbar" aria-label="Configurações da descida">
-        <div class="ride-toggle"><button class="active" data-ride="snowboard">SNOWBOARD</button><button data-ride="ski">SKI</button></div>
-        <div class="route-toggle"><span>LINHA</span><button class="active" data-route="flow">FLOW</button><button data-route="speed">VELOCIDADE</button><button data-route="technical">TÉCNICA</button></div>
-        <div class="weather-toggle"><span>CONDIÇÃO</span><button class="active" data-weather="clear">ABERTO</button><button data-weather="storm">NEVASCA</button></div>
-        <button class="sound-toggle" id="sound-toggle" aria-pressed="false">ÁUDIO: OFF</button>
-      </div>
-      <div class="game-wrap" tabindex="0">
-        <canvas id="game" width="1200" height="640" aria-label="Protótipo jogável de snowboard"></canvas>
-        <div class="weather-fx" id="weather-fx"></div>
-        <div class="progress-track"><i id="run-progress"></i><span id="checkpoint-label">CUME</span></div>
-        <div class="game-hud">
-          <div class="speedometer"><small>VELOCIDADE</small><b id="speed">42</b><span>KM/H</span></div>
-          <div class="run-data"><span><small>SUPERFÍCIE</small><b id="surface">POWDER</b></span><span><small>DISTÂNCIA</small><b id="distance">0 M</b></span></div>
-          <div class="hud-flow"><small>FLOW</small><b id="game-flow">0</b><span id="flow-label">ENCONTRE O RITMO</span><em id="combo-label">×1</em></div>
-        </div>
-        <div class="trick-callout" id="trick-callout"></div>
-        <button class="pause-button" id="pause-game" aria-label="Pausar descida">Ⅱ</button>
-        <div class="start-overlay" id="start-overlay"><div class="start-card"><p>LINHA ZERO / TRECHO 01</p><h3>FLORESTA<br>BOREAL</h3><div class="mission"><span>OBJETIVO DE LINHA</span><b>Termine com 300 FLOW e 70% de precisão.</b></div><ul><li><b>← →</b> controle de borda</li><li><b>↓</b> tuck / ganhar velocidade</li><li><b>ESPAÇO</b> carregar e soltar ollie</li><li><b>Z / X</b> rotacionar no ar</li><li><b>C / V</b> grabs no ar</li><li><b>SHIFT</b> butter no solo</li></ul><button id="start-game">INICIAR DESCIDA <span>▶</span></button><small>Desvie, passe perto e conecte movimentos.</small></div></div>
-        <div class="pause-overlay" id="pause-overlay"><div><p>DESCIDA PAUSADA</p><h3>RESPIRE.<br>LEIA A LINHA.</h3><button id="resume-game">CONTINUAR ▶</button><button id="reset-game">RECOMEÇAR ↻</button></div></div>
-        <div class="replay-studio" id="replay-studio">
-          <div><span>REPLAY STUDIO</span><b id="replay-time">00:00</b></div>
-          <input id="replay-scrubber" type="range" min="0" max="100" value="0" aria-label="Posição do replay">
-          <button id="replay-play" aria-label="Pausar ou reproduzir replay">Ⅱ</button>
-          <button class="active" data-camera="chase">CHASE</button><button data-camera="drone">DRONE</button><button data-camera="side">SIDE</button>
-          <select id="replay-speed" aria-label="Velocidade do replay"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
-          <button id="close-replay">FECHAR</button>
-        </div>
-        <div class="result-overlay" id="result-overlay"><div class="result-card"><p id="result-status">LINHA CONCLUÍDA</p><h3 id="result-grade">A</h3><div><span>FLOW FINAL <b id="result-flow">0</b></span><span>VELOCIDADE MÁX. <b id="result-speed">0</b></span><span>LINHA LIMPA <b id="result-clean">0%</b></span></div><div class="quality-bars" id="quality-bars"></div><small id="best-label">MELHOR LINHA: 0</small><button id="replay-game">ABRIR REPLAY STUDIO ◉</button><button id="export-line">EXPORTAR LINHA ↓</button><button id="restart-game">DESCER NOVAMENTE ↻</button></div></div>
-        <div class="touch-controls"><button data-key="ArrowLeft">←</button><button data-key="ArrowDown">↓</button><button data-key="ArrowRight">→</button><button data-key="KeyC">GRAB</button><button class="touch-jump" data-key="Space">OLLIE</button></div>
-      </div>
-    </section>
-  </main>
-  <footer><a class="brand" href="#top"><span class="brand-mark">S</span> SNOWY</a><p>ENCONTRE SUA LINHA. DEPOIS ENCONTRE OUTRA.</p><span>CONCEITO / VERTICAL SLICE 01</span></footer>
-  <script src="core.js"></script>
-  <script src="script.js"></script>
-  <noscript>Snowy precisa de JavaScript habilitado para executar o vertical slice jogável.</noscript>
+  </div>
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
