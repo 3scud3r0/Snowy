@@ -48,8 +48,8 @@ function colorSkinnedMesh(mesh) {
 }
 
 function snowboardGeometry() {
-  const halfW = .67;
-  const halfL = 3.18;
+  const halfW = .63;
+  const halfL = 2.86;
   const tip = .42;
   const shape = new THREE.Shape();
 
@@ -99,7 +99,7 @@ export class Rider {
     this.stance = new THREE.Group();
     this.group.add(this.stance);
 
-    this.bodyYaw = -.68;
+    this.bodyYaw = -.30;
 
     this.fallback = this.createFallback();
     this.fallback.scale.setScalar(.48);
@@ -121,7 +121,7 @@ export class Rider {
     this.board = new THREE.Mesh(snowboardGeometry(), boardMaterial);
     this.board.position.y = .18;
     this.board.castShadow = this.board.receiveShadow = true;
-    this.boardAssembly.add(this.board, binding(bindingMaterial,-1.28), binding(bindingMaterial,1.28));
+    this.boardAssembly.add(this.board, binding(bindingMaterial,-1.12), binding(bindingMaterial,1.12));
     this.stance.add(this.boardAssembly);
 
     this.backpack = new THREE.Mesh(
@@ -284,10 +284,10 @@ export class Rider {
     this.setBone('lowerarm_l',-.35,0,-.12);
     this.setBone('lowerarm_r',-.35,0,.12);
 
-    if (this.model) this.model.position.y = this.modelBaseY - .16 - speed01*.18;
+    if (this.model) this.model.position.y = this.modelBaseY - .72 - speed01*.24;
 
-    this.solveLeg('l',new THREE.Vector3(-.08,.42,-1.28));
-    this.solveLeg('r',new THREE.Vector3(.08,.42,1.28));
+    this.solveLeg('l',new THREE.Vector3(-.24,.39,-1.12));
+    this.solveLeg('r',new THREE.Vector3(.24,.39,1.12));
   }
 
   setPose({ steer,speed,airborne }) {
@@ -297,7 +297,7 @@ export class Rider {
     this.stance.rotation.z = THREE.MathUtils.lerp(this.stance.rotation.z,-lean,.13);
     this.stance.rotation.x = THREE.MathUtils.lerp(
       this.stance.rotation.x,
-      airborne ? -.12 : .08 + speed01*.12,
+      airborne ? -.10 : .13 + speed01*.15,
       .10
     );
     this.stance.rotation.y = THREE.MathUtils.lerp(this.stance.rotation.y,steer*.035,.08);
