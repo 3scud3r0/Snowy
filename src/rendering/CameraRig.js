@@ -5,19 +5,40 @@ export class CameraRig {
     this.camera = camera;
     this.look = new THREE.Vector3();
     this.pos = new THREE.Vector3();
+    this.time = 0;
   }
 
   update(dt, rider, state, steer) {
+    this.time += dt;
     const speed = Math.abs(state.speed);
-    const offset = new THREE.Vector3(-steer * 4.8, 8.2 + speed * .018, 17.5 + speed * .045);
+    const speed01 = THREE.MathUtils.clamp((speed - 35) / 85, 0, 1);
+    const offset = new THREE.Vector3(
+      -steer * (4.2 + speed01 * 2.4),
+      8.4 + speed * .015 + state.airborne * 1.6,
+      17.8 + speed * .042
+    );
+
     const targetPos = rider.position.clone().add(offset);
-    this.pos.lerp(targetPos, 1 - Math.exp(-dt * 4.2));
+    this.pos.lerp(targetPos, 1 - Math.exp(-dt * 4.6));
+
+    const shake = speed01 * .11;
     this.camera.position.copy(this.pos);
-    const targetLook = rider.position.clone().add(new THREE.Vector3(steer * 4, 3.2, -18 - speed * .08));
-    this.look.lerp(targetLook, 1 - Math.exp(-dt * 5.8));
+    this.camera.position.x += Math.sin(this.time * 19.7) * shake;
+    this.camera.position.y += Math.sin(this.time * 27.1) * shake * .45;
+
+    const targetLook = rider.position.clone().add(new THREE.Vector3(
+      steer * 4.8,
+      3.0,
+      -19 - speed * .095
+    ));
+    this.look.lerp(targetLook, 1 - Math.exp(-dt * 6.1));
     this.camera.lookAt(this.look);
-    const targetFov = 64 + THREE.MathUtils.clamp(speed * .13, 0, 15);
-    this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, targetFov, 1 - Math.exp(-dt * 2.5));
+
+    const targetRoll = -steer * (.025 + speed01 * .042);
+    this.camera.rotation.z = THREE.MathUtils.lerp(this.camera.rotation.z, targetRoll, 1 - Math.exp(-dt * 5));
+
+    const targetFov = 63 + THREE.MathUtils.clamp(speed * .145, 0, 17);
+    this.camera.fov = THREE.MathUtils.lerp(this.camera.fov, targetFov, 1 - Math.exp(-dt * 2.7));
     this.camera.updateProjectionMatrix();
   }
 }
