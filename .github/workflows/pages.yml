@@ -8,7 +8,7 @@ permissions:
   pages: write
   id-token: write
 concurrency:
-  group: snowy-three-pages
+  group: snowy-three-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
@@ -21,10 +21,13 @@ jobs:
       - run: npm install
       - run: npm run check
       - uses: actions/configure-pages@v5
+        if: github.ref == 'refs/heads/main'
       - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main'
         with:
           path: dist
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     environment:
       name: github-pages
