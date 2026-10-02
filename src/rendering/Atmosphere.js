@@ -76,15 +76,18 @@ export function createAlpineBackdrop(scene) {
     const z = localZ + centerZ;
     let envelope = 0;
     for (const peak of peaks) {
-      const dx = (x - peak.x) / peak.w;
-      envelope = Math.max(envelope, peak.h * Math.exp(-dx*dx*.5));
+      const dx = Math.abs((x-peak.x)/peak.w);
+      const silhouette = dx < 1 ? Math.pow(1-dx,.62) : 0;
+      envelope = Math.max(envelope,peak.h*silhouette);
     }
     const ridge = Math.exp(-Math.pow((z + 3540) / 520, 2));
     const detail =
       Math.sin(x*.011 + z*.004)*26 +
       Math.sin(x*.027 - z*.009)*15 +
       Math.sin(x*.063 + z*.015)*6;
-    const terraces = Math.abs(Math.sin(x*.006 + z*.003))*24;
+    const terraces =
+      Math.abs(Math.sin(x*.006+z*.003))*20 +
+      Math.abs(Math.sin(x*.013-z*.002))*11;
     p.setY(i, -165 + ridge * (envelope + detail + terraces));
   }
 
