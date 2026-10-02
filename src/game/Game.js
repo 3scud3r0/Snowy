@@ -29,11 +29,11 @@ export class Game {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.02;
+    this.renderer.toneMappingExposure = .93;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xa9bbc6);
-    this.scene.fog = new THREE.FogExp2(0xaabdc8, .00032);
+    this.scene.background = new THREE.Color(0xa4b6c1);
+    this.scene.fog = new THREE.FogExp2(0xa8bac5, .00025);
 
     this.camera = new THREE.PerspectiveCamera(64, innerWidth / innerHeight, .1, 5200);
     this.cameraRig = new CameraRig(this.camera);
@@ -53,13 +53,13 @@ export class Game {
   }
 
   setupWorld() {
-    const hemi = new THREE.HemisphereLight(0xd9efff, 0x34454d, 1.72);
+    const hemi = new THREE.HemisphereLight(0xd9efff,0x34454d,1.46);
     this.scene.add(hemi);
 
     const atmosphere = createAtmosphere(this.scene);
     createAlpineBackdrop(this.scene);
 
-    this.sun = new THREE.DirectionalLight(0xfff1d5, 4.8);
+    this.sun = new THREE.DirectionalLight(0xfff1d5,4.15);
     this.sunOffset = atmosphere.sunDirection.clone().multiplyScalar(620);
     this.sunTarget = new THREE.Object3D();
     this.scene.add(this.sunTarget);
