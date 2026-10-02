@@ -33,7 +33,7 @@ export class SnowFX {
       map: puff,
       alphaMap: puff,
       alphaTest: .015,
-      size: 1.08,
+      size: 1.22,
       sizeAttenuation: true,
       transparent: true,
       opacity: .72,
@@ -70,19 +70,19 @@ export class SnowFX {
 
   emit(position, speed, steer) {
     if (speed < 8) return;
-    const amount = Math.min(20, 2 + Math.floor(speed / 8));
+    const amount = Math.min(30,3+Math.floor(speed/7)+Math.floor(edge*7));
     const edge = Math.abs(steer);
     for (let n=0;n<amount;n++) {
       const i=this.cursor++%this.sprayCount, k=i*3;
       this.positions[k]=position.x+(Math.random()-.5)*(1.2+edge*2.4);
-      this.positions[k+1]=position.y+.18+Math.random()*.65;
+      this.positions[k+1]=position.y+.10+Math.random()*.52;
       this.positions[k+2]=position.z+1.4+Math.random()*1.8;
       this.velocity[i].set(
-        (Math.random()-.5)*(4+edge*10)-steer*5.5,
-        1.6+Math.random()*(3.5+edge*2),
-        3+Math.random()*(7+speed*.045)
+        (Math.random()-.5)*(4+edge*12)-steer*(8+speed*.07),
+        1.4+Math.random()*(3.8+edge*2.5),
+        3+Math.random()*(8+speed*.055)
       );
-      this.life[i]=.45+Math.random()*.55;
+      this.life[i]=.50+Math.random()*.62;
     }
   }
 
