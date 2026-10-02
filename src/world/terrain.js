@@ -28,8 +28,11 @@ export function terrainHeight(x, z) {
   const detail = (fbm(x * .008, z * .008) - .5) * 16;
   const ridge = Math.abs(Math.sin(x * .0052 + z * .0016)) * 9;
   const fall = z * .105;
-  const corridor = -Math.exp(-Math.pow(x / 150, 2)) * 11;
-  return 145 + fall + macro + detail + ridge + corridor;
+  const corridor = -Math.exp(-Math.pow(x/125,2))*14;
+  const side = THREE.MathUtils.clamp((Math.abs(x)-72)/378,0,1);
+  const valleyWalls = Math.pow(side,1.55)*(48+Math.sin(z*.0037)*13);
+  const asymmetricBank = Math.max(0,x-125)*.055*(.55+.45*Math.sin(z*.0021+1.4));
+  return 145+fall+macro+detail+ridge+corridor+valleyWalls+asymmetricBank;
 }
 
 function snowDetailTexture() {
