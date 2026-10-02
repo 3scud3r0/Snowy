@@ -72,10 +72,10 @@ export class Rider {
     this.stance.add(this.board);
 
     this.backpack = new THREE.Mesh(
-      new THREE.BoxGeometry(2.2,2.7,.95),
-      new THREE.MeshStandardMaterial({color:0x171d20,roughness:.72})
+      new THREE.BoxGeometry(1.45,1.85,.62),
+      new THREE.MeshStandardMaterial({color:0x202a2f,roughness:.76})
     );
-    this.backpack.position.set(0,5.15,1.0);
+    this.backpack.position.set(0,4.75,.82);
     this.backpack.rotation.x = -.13;
     this.backpack.castShadow = true;
     this.stance.add(this.backpack);
