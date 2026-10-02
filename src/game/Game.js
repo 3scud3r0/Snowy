@@ -1,9 +1,12 @@
 import * as THREE from 'three';
 import { createTerrain, terrainHeight } from '../world/terrain.js';
-import { createPines, createRocks, createCabin, createLift, createCheckpoint } from '../world/environment.js';
+import { createPines, createBirches, createRocks, createCabin, createLift, createFrozenLake, createCheckpoint } from '../world/environment.js';
 import { Rider } from '../rider/Rider.js';
 import { SnowFX } from '../snow/SnowFX.js';
+import { SnowTracks } from '../snow/SnowTracks.js';
 import { CameraRig } from '../rendering/CameraRig.js';
+import { createAtmosphere, createAlpineBackdrop } from '../rendering/Atmosphere.js';
+import { PostFX } from '../rendering/PostFX.js';
 import { surfaceAt, grade } from './physics.js';
 
 export class Game {
@@ -11,18 +14,19 @@ export class Game {
     this.canvas = canvas;
     this.ui = ui;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.65));
     this.renderer.setSize(innerWidth, innerHeight, false);
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.08;
+    this.renderer.toneMappingExposure = 1.02;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x9db4c4);
-    this.scene.fog = new THREE.FogExp2(0xa8bac5, .00115);
-    this.camera = new THREE.PerspectiveCamera(64, innerWidth / innerHeight, .1, 4200);
+    this.scene.background = new THREE.Color(0xa9bbc6);
+    this.scene.fog = new THREE.FogExp2(0xb7c5cd, .00072);
+
+    this.camera = new THREE.PerspectiveCamera(64, innerWidth / innerHeight, .1, 5200);
     this.cameraRig = new CameraRig(this.camera);
 
     this.keys = new Set();
@@ -32,6 +36,7 @@ export class Game {
     this.state = { x: 0, z: 120, speed: 0, maxSpeed: 0, vx: 0, vy: 0, airborne: 0, flow: 0, clean: 100, steer: 0, distance: 0 };
 
     this.setupWorld();
+    this.post = new PostFX(this.renderer, this.scene, this.camera);
     this.setupInput();
     this.resize();
     addEventListener('resize', () => this.resize());
@@ -39,37 +44,46 @@ export class Game {
   }
 
   setupWorld() {
-    const hemi = new THREE.HemisphereLight(0xcfe9ff, 0x33424a, 2.2);
+    const hemi = new THREE.HemisphereLight(0xd9efff, 0x34454d, 1.72);
     this.scene.add(hemi);
 
-    const sun = new THREE.DirectionalLight(0xfff2da, 5.2);
-    sun.position.set(-220, 360, 180);
-    sun.castShadow = true;
-    sun.shadow.mapSize.set(2048, 2048);
-    sun.shadow.camera.left = -290;
-    sun.shadow.camera.right = 290;
-    sun.shadow.camera.top = 290;
-    sun.shadow.camera.bottom = -290;
-    sun.shadow.camera.near = 10;
-    sun.shadow.camera.far = 1050;
-    sun.shadow.bias = -.00025;
-    this.scene.add(sun);
+    const atmosphere = createAtmosphere(this.scene);
+    createAlpineBackdrop(this.scene);
 
-    this.scene.add(createTerrain(), createPines(), createRocks(), createCabin(), createLift());
+    this.sun = new THREE.DirectionalLight(0xfff1d5, 4.8);
+    this.sunOffset = atmosphere.sunDirection.clone().multiplyScalar(620);
+    this.sunTarget = new THREE.Object3D();
+    this.scene.add(this.sunTarget);
+    this.sun.target = this.sunTarget;
+    this.sun.castShadow = true;
+    this.sun.shadow.mapSize.set(2048, 2048);
+    this.sun.shadow.camera.left = -190;
+    this.sun.shadow.camera.right = 190;
+    this.sun.shadow.camera.top = 190;
+    this.sun.shadow.camera.bottom = -190;
+    this.sun.shadow.camera.near = 10;
+    this.sun.shadow.camera.far = 930;
+    this.sun.shadow.bias = -.00022;
+    this.scene.add(this.sun);
+
+    this.scene.add(
+      createTerrain(),
+      createPines(),
+      createBirches(),
+      createRocks(),
+      createCabin(),
+      createLift(),
+      createFrozenLake()
+    );
+
     this.checkpoint = createCheckpoint();
     this.scene.add(this.checkpoint);
 
     this.rider = new Rider();
     this.scene.add(this.rider.group);
+
     this.snow = new SnowFX(this.scene);
-
-    const sky = new THREE.Mesh(
-      new THREE.SphereGeometry(3000, 32, 14),
-      new THREE.MeshBasicMaterial({ color: 0xb7cad6, side: THREE.BackSide })
-    );
-    sky.position.y = 300;
-    this.scene.add(sky);
-
+    this.tracks = new SnowTracks(this.scene);
     this.reset();
   }
 
@@ -89,14 +103,18 @@ export class Game {
     this.running = true;
     this.ui.start.classList.add('hidden');
     this.ui.finish.classList.remove('visible');
+    this.ui.objective.classList.remove('hidden');
   }
 
   reset() {
     Object.assign(this.state, { x: 0, z: 120, speed: 0, maxSpeed: 0, vx: 0, vy: 0, airborne: 0, flow: 0, clean: 100, steer: 0, distance: 0 });
     this.finished = false;
+    if (this.tracks) this.tracks.reset();
     this.rider.group.position.set(0, terrainHeight(0, 120) + 1, 120);
+    this.rider.group.rotation.set(0,0,0);
     this.camera.position.set(0, this.rider.group.position.y + 11, 142);
     this.cameraRig.pos.copy(this.camera.position);
+    this.cameraRig.look.copy(this.rider.group.position).add(new THREE.Vector3(0,3,-20));
   }
 
   jump() {
@@ -117,6 +135,7 @@ export class Game {
     s.steer = THREE.MathUtils.lerp(s.steer, steer, 1 - Math.exp(-dt * 7));
     const surface = surfaceAt(s.distance);
     const target = tuck ? surface.maxSpeed + 10 : surface.maxSpeed;
+
     s.speed += (target - s.speed) * Math.min(1, dt * surface.acceleration * .055);
     s.speed -= Math.abs(s.steer) * surface.drag * dt * 5.2;
     s.speed = Math.max(0, s.speed);
@@ -131,6 +150,7 @@ export class Game {
     s.distance += dz;
 
     const ground = terrainHeight(s.x, s.z) + 1;
+
     if (s.airborne > 0) {
       s.vy -= 21 * dt;
       this.rider.group.position.y += s.vy * dt;
@@ -147,15 +167,22 @@ export class Game {
 
     this.rider.group.position.x = s.x;
     this.rider.group.position.z = s.z;
+
     const slopeAhead = terrainHeight(s.x, s.z - 4) - terrainHeight(s.x, s.z + 4);
-    this.rider.group.rotation.x = THREE.MathUtils.lerp(this.rider.group.rotation.x, Math.atan2(slopeAhead, 8), .1);
+    const pitch = Math.atan2(slopeAhead, 8);
+    this.rider.group.rotation.x = THREE.MathUtils.lerp(this.rider.group.rotation.x, pitch, .12);
+    this.rider.group.rotation.y = THREE.MathUtils.lerp(this.rider.group.rotation.y, -s.steer * .055, .1);
     this.rider.setPose({ steer: s.steer, speed: s.speed, airborne: s.airborne });
 
     if (Math.abs(s.steer) > .22 && !s.airborne) s.flow += dt * s.speed * .065;
 
+    this.tracks.add(this.rider.group.position, s.steer, s.airborne);
     this.snow.emit(this.rider.group.position, s.speed, s.steer);
     this.snow.update(dt, s.z);
     this.cameraRig.update(dt, this.rider.group, s, s.steer);
+
+    this.sunTarget.position.copy(this.rider.group.position);
+    this.sun.position.copy(this.rider.group.position).add(this.sunOffset);
 
     const checkpointDistance = Math.max(0, Math.abs(this.checkpoint.userData.z - s.z));
     this.ui.update({
@@ -180,12 +207,13 @@ export class Game {
     const dt = Math.min((now - this.last) / 1000, .035);
     this.last = now;
     if (this.running) this.update(dt);
-    this.renderer.render(this.scene, this.camera);
+    this.post.render();
     requestAnimationFrame(t => this.loop(t));
   }
 
   resize() {
     this.renderer.setSize(innerWidth, innerHeight, false);
+    if (this.post) this.post.setSize(innerWidth, innerHeight);
     this.camera.aspect = innerWidth / innerHeight;
     this.camera.updateProjectionMatrix();
   }
