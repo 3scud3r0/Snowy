@@ -14,6 +14,7 @@ export class HUD {
     this.speedFx = $('#speed-fx');
     this.objective = $('#objective-card');
     this.score = $('#score-pop');
+    this.checkpointLabel = $('#checkpoint-label');
   }
 
   update({ speed, flow, distance, progress }) {
@@ -25,6 +26,16 @@ export class HUD {
     this.routeDot.style.top = `${Math.max(0, Math.min(100, progress * 100))}%`;
     this.speedFx.classList.toggle('fast', speed > 82);
     if (progress > .12) this.objective.classList.add('hidden');
+  }
+
+  updateWorldMarker(worldPosition, camera) {
+    const projected = worldPosition.clone().project(camera);
+    const behind = projected.z > 1;
+    const x = Math.max(.08, Math.min(.92, projected.x * .5 + .5));
+    const y = Math.max(.12, Math.min(.78, -projected.y * .5 + .5));
+    this.checkpointLabel.style.left = `${x * 100}%`;
+    this.checkpointLabel.style.top = `${y * 100}%`;
+    this.checkpointLabel.style.opacity = behind ? '0' : '1';
   }
 
   pop(text) {
