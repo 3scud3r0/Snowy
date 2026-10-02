@@ -66,13 +66,14 @@ export class Game {
     this.sun.target = this.sunTarget;
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(this.qaFull ? 1024 : 2048, this.qaFull ? 1024 : 2048);
-    this.sun.shadow.camera.left = -190;
-    this.sun.shadow.camera.right = 190;
-    this.sun.shadow.camera.top = 190;
-    this.sun.shadow.camera.bottom = -190;
-    this.sun.shadow.camera.near = 10;
-    this.sun.shadow.camera.far = 930;
-    this.sun.shadow.bias = -.00022;
+    this.sun.shadow.camera.left = -105;
+    this.sun.shadow.camera.right = 105;
+    this.sun.shadow.camera.top = 105;
+    this.sun.shadow.camera.bottom = -105;
+    this.sun.shadow.camera.near = 120;
+    this.sun.shadow.camera.far = 780;
+    this.sun.shadow.bias = -.00014;
+    this.sun.shadow.normalBias = .028;
     this.scene.add(this.sun);
 
     this.scene.add(
