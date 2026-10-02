@@ -53,7 +53,7 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 0.5
           done
-          npm run visual:smoke
+          xvfb-run -a npm run visual:smoke
 
       - name: Upload visual QA screenshots
         if: always() && github.ref == 'refs/heads/three-rebuild-steep-target'
