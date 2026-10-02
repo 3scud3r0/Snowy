@@ -10,13 +10,12 @@ const browser = await chromium.launch({
   args: [
     '--ignore-gpu-blocklist',
     '--enable-webgl',
-    '--use-gl=egl',
     '--disable-dev-shm-usage'
   ]
 });
 
 const page = await browser.newPage({
-  viewport: { width: 1440, height: 900 },
+  viewport: { width: 960, height: 540 },
   deviceScaleFactor: 1
 });
 
@@ -29,7 +28,7 @@ page.on('console', message => {
 });
 
 try {
-  await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.goto('http://127.0.0.1:4173/?qa=1', { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForFunction(() => window.__snowy && window.__snowy.renderer, null, { timeout: 15000 });
   await page.waitForTimeout(1600);
   await page.screenshot({ path: new URL('01-start.png', out).pathname });
