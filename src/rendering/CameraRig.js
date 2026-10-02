@@ -14,8 +14,8 @@ export class CameraRig {
     const speed01 = THREE.MathUtils.clamp((speed - 35) / 85, 0, 1);
     const offset = new THREE.Vector3(
       -steer * (4.2 + speed01 * 2.4),
-      7.6 + speed * .014 + state.airborne * 1.4,
-      23.5 + speed * .052
+      7.1 + speed * .012 + state.airborne * 1.2,
+      15.8 + speed * .035
     );
 
     const targetPos = rider.position.clone().add(offset);
@@ -29,7 +29,7 @@ export class CameraRig {
     const targetLook = rider.position.clone().add(new THREE.Vector3(
       steer * 4.8,
       3.0,
-      -23 - speed * .11
+      -19 - speed * .09
     ));
     this.look.lerp(targetLook, 1 - Math.exp(-dt * 6.1));
     this.camera.lookAt(this.look);
